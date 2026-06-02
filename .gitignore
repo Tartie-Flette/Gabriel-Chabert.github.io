@@ -1,0 +1,14 @@
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Dossier de l'éditeur de code
+.vscode/
+.idea/
+
+# Fichiers temporaires ou de build (si tu en génères plus tard)
+*.log
+node_modules/
+dist/
+build/
+__pycache__/
