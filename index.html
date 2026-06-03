@@ -3,52 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gabriel Chabert | Ingénieur Mécatronique & Robotique</title>
+    <title>Projets | Gabriel Chabert</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <header>
-        <section id="hero-animation">
-            <video autoplay loop muted playsinline>
-                <source src="assets/intro.mp4" type="video/mp4">
-            </video>
-        </section>
         <h1>Gabriel Chabert</h1>
         <h2>Ingénieur Systèmes Embarqués & Robotique</h2>
         <nav>
             <ul>
-                <li><a href="#a-propos">À propos</a></li>
-                <li><a href="#projets">Projets d'Ingénierie</a></li>
-                <li><a href="#competences">Compétences Techniques</a></li>
+                <li><a href="index.html">Parcours</a></li>
+                <li><a href="projets.html">Projets</a></li>
+                <li><a href="resume.html">Resume</a></li>
             </ul>
         </nav>
     </header>
 
     <main>
-        <section id="a-propos">
-            <h3>La démarche</h3>
-            <p>De la modélisation de systèmes électriques à l'implémentation de boucles d'asservissement en temps réel, je fais le pont entre les contraintes matérielles et les solutions logicielles.</p>
-        </section>
-
-        <section id="projets">
-            <h3>Projets Phares</h3>
+        <section id="portfolio-technique">
             
-            <article>
-                <h4>Intégration Système USV BlueBoat</h4>
-                <p>Développement d'une interface homme-machine asynchrone et résolution de la fragmentation réseau sous ROS 2 et Python.</p>
+            <article class="projet-container">
+                <h3>Intégration Système USV BlueBoat & IHM Asynchrone</h3>
+                <div class="tags">
+                    <span>Python</span> <span>ROS 2</span> <span>PyQt5</span> <span>TCP/IP</span>
+                </div>
+                
+                <div class="projet-contenu">
+                    <p><strong>Le défi :</strong> Centraliser la télémétrie temps réel et le contrôle à distance du navire tout en gérant l'intégration de capteurs hétérogènes (NMEA 0183, JSON, binaire) via un convertisseur Série-vers-Ethernet.</p>
+                    
+                    <p><strong>La solution :</strong> Développement d'une Interface Homme-Machine (IHM) asynchrone. L'analyse des causes racines (RCA) sur la fragmentation du réseau a conduit à l'implémentation d'algorithmes de filtrage de données et de tampons pour fiabiliser la communication.</p>
+                    
+                    <img src="assets/blueboat-ihm.jpg" alt="Capture de l'interface PyQt5 de supervision" style="width:100%; border-radius: 4px; margin-top: 15px;">
+                </div>
             </article>
-            
-            <article>
-                <h4>Robot Mobile Autonome</h4>
-                <p>Conception d'une machine à états finis et d'une couche de communication UART multi-thread en C.</p>
-            </article>
-        </section>
 
-        <section id="competences">
-            <h3>Boîte à outils</h3>
-            <p><strong>Langages :</strong> Python, C/C++, ROS 2</p>
-            <p><strong>Simulation :</strong> MATLAB/Simulink, Abaqus, CST Studio Suite</p>
+            <hr>
+
+            <article class="projet-container">
+                <h3>Robot Mobile Autonome & Contrôle Temps Réel</h3>
+                <div class="tags">
+                    <span>C</span> <span>Systèmes Embarqués</span> <span>UART</span>
+                </div>
+                
+                <div class="projet-contenu">
+                    <p><strong>Le défi :</strong> Garantir l'évitement d'obstacles automatisé et la reprise en main manuelle sans faille sur une architecture embarquée contrainte.</p>
+                    
+                    <p><strong>La solution :</strong> Conception d'une machine à états finis (FSM) en C. Le flux de données est sécurisé par une couche de communication UART multi-thread, utilisant des buffers circulaires (FIFO) et un protocole de paquets validés par checksum.</p>
+                    
+                    <details style="margin-top: 15px; padding: 10px; background-color: #eee; border-radius: 4px;">
+                        <summary style="cursor: pointer; font-weight: bold;">Voir la logique de la machine à états</summary>
+                        <p style="font-family: monospace; font-size: 0.9em; margin-top: 10px;">
+                            // Extrait conceptuel de la gestion des états<br>
+                            switch(robot_state) {<br>
+                            &nbsp;&nbsp;case STATE_AUTO_AVOID:<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;calculate_trajectory();<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;break;<br>
+                            &nbsp;&nbsp;case STATE_MANUAL_OVERRIDE:<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;read_uart_buffer();<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;break;<br>
+                            }
+                        </p>
+                    </details>
+                </div>
+            </article>
+
+            <hr>
+
+            <article class="projet-container">
+                <h3>Modélisation Dynamique & Asservissement ABS</h3>
+                <div class="tags">
+                    <span>MATLAB/Simulink</span> <span>Automatique</span>
+                </div>
+                
+                <div class="projet-contenu">
+                    <p><strong>L'objectif :</strong> Optimiser le glissement des roues d'un véhicule au freinage en tenant compte des contraintes physiques de la boucle d'asservissement.</p>
+                    
+                    <p><strong>La méthode :</strong> Modélisation du système et implémentation de correcteurs PI et Bang-Bang en temps discret. L'accent a été mis sur l'évaluation des limites de stabilité en simulant les fréquences d'échantillonnage et les retards de transfert de données.</p>
+                </div>
+            </article>
+
         </section>
     </main>
 
