@@ -1,18 +1,18 @@
-/* Variables CSS : Le cœur de ton identité visuelle */
+/* --- VARIABLES GLOBALES --- */
 :root {
     --bg-color: #FDFBF7;
     --text-main: #2A2A2A;
     --text-light: #555555;
-    --accent-color: #C84B31; /* Terracotta profond */
-    --accent-warm: #E27D60; /* Orange cuivré */
-    --accent-gold: #E8A87C; /* Ocre doré */
+    --accent-color: #C84B31;
+    --accent-warm: #E27D60;
+    --accent-gold: #E8A87C;
     --card-bg: #FFFFFF;
     --border-radius: 16px;
-    /* Courbe de Bézier pour un effet "ressort" physique au survol */
     --transition-bounce: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    --transition: all 0.3s ease;
 }
 
-/* Reset et typographie globale */
+/* --- RESET & TYPOGRAPHIE --- */
 * {
     margin: 0;
     padding: 0;
@@ -32,7 +32,14 @@ body {
     padding: 0 20px;
 }
 
-/* Navigation Moderne */
+.gradient-text {
+    background: linear-gradient(135deg, var(--accent-color), var(--accent-gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+}
+
+/* --- NAVIGATION --- */
 .navbar {
     background-color: var(--bg-color);
     padding: 20px 0;
@@ -75,10 +82,10 @@ body {
     color: var(--accent-color);
 }
 
-/* Section Hero (Vidéo d'accueil) */
+/* --- SECTION HERO (ACCUEIL) --- */
 .hero {
     position: relative;
-    height: 70vh; /* Prend 70% de l'écran */
+    height: 70vh;
     min-height: 500px;
     display: flex;
     align-items: center;
@@ -108,7 +115,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Assombrit la vidéo pour la lisibilité */
+    background: rgba(0, 0, 0, 0.5);
     z-index: -1;
 }
 
@@ -133,76 +140,7 @@ body {
     opacity: 0.8;
 }
 
-/* Section Parcours */
-.about-section {
-    display: grid;
-    grid-template-columns: 3fr 2fr;
-    gap: 50px;
-    margin-bottom: 80px;
-}
-
-.about-text h3 {
-    font-size: 2rem;
-    color: var(--accent-color);
-    margin-bottom: 20px;
-}
-
-.about-text p {
-    margin-bottom: 20px;
-    font-size: 1.1rem;
-    color: var(--text-light);
-}
-
-.about-stats {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.stat-card {
-    background-color: var(--card-bg);
-    padding: 30px;
-    border-radius: var(--border-radius);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.04);
-    border-left: 4px solid var(--accent-color);
-}
-
-.stat-card h4 {
-    margin-bottom: 10px;
-    font-size: 1.2rem;
-}
-
-/* Pied de page */
-footer {
-    background-color: var(--card-bg);
-    padding: 40px 0;
-    margin-top: 60px;
-    border-top: 1px solid #EAEAEA;
-}
-
-.footer-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: var(--text-light);
-}
-
-.btn-link {
-    text-decoration: none;
-    color: var(--accent-color);
-    font-weight: 600;
-}
-
-/* Animations */
-/* Effet innovant : Dégradé textuel chaleureux */
-.gradient-text {
-    background: linear-gradient(135deg, var(--accent-color), var(--accent-gold));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    display: inline-block;
-}
-
-/* Grille interactive pour les compétences */
+/* --- GRILLE DE COMPÉTENCES --- */
 .skills-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -215,7 +153,7 @@ footer {
     background: var(--card-bg);
     padding: 30px 20px;
     border-radius: var(--border-radius);
-    box-shadow: 0 10px 30px rgba(200, 75, 49, 0.05); /* Ombre teintée terracotta */
+    box-shadow: 0 10px 30px rgba(200, 75, 49, 0.05);
     border-bottom: 4px solid var(--accent-warm);
     transition: var(--transition-bounce);
     position: relative;
@@ -259,4 +197,97 @@ footer {
     margin: 4px;
     color: var(--accent-color);
     border: 1px solid rgba(200, 75, 49, 0.2);
+}
+
+/* --- PROJETS --- */
+.project-card {
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+    margin-bottom: 30px;
+    border-left: 4px solid var(--accent-color);
+}
+
+.project-card h3 {
+    font-size: 1.4rem;
+    color: var(--text-main);
+    margin-bottom: 15px;
+}
+
+.project-content p {
+    margin-bottom: 15px;
+}
+
+/* --- LIGNE DE TEMPS (CV) --- */
+.timeline {
+    border-left: 3px solid var(--accent-warm);
+    padding-left: 30px;
+    margin-left: 20px;
+    margin-top: 40px;
+    margin-bottom: 60px;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 40px;
+}
+
+.timeline-item::before {
+    content: "";
+    position: absolute;
+    left: -40px;
+    top: 5px;
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    background-color: var(--card-bg);
+    border: 4px solid var(--accent-color);
+    transition: var(--transition-bounce);
+}
+
+.timeline-item:hover::before {
+    background-color: var(--accent-color);
+    transform: scale(1.2);
+}
+
+.timeline-date {
+    font-weight: 600;
+    color: var(--accent-color);
+    margin-bottom: 5px;
+    font-size: 0.95rem;
+}
+
+.timeline-title {
+    font-size: 1.3rem;
+    color: var(--text-main);
+    margin-bottom: 2px;
+}
+
+.timeline-subtitle {
+    font-size: 1.05rem;
+    color: var(--text-light);
+    margin-bottom: 15px;
+    font-style: italic;
+}
+
+/* --- PIED DE PAGE --- */
+footer {
+    background-color: var(--card-bg);
+    padding: 40px 0;
+    margin-top: 60px;
+    border-top: 1px solid #EAEAEA;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-light);
+}
+
+.btn-link {
+    text-decoration: none;
+    color: var(--accent-color);
+    font-weight: 600;
 }
