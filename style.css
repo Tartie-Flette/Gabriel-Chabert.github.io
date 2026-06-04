@@ -1,33 +1,192 @@
+/* Variables CSS : Le cœur de ton identité visuelle */
+:root {
+    --bg-color: #FDFBF7; /* Un crème chaleureux */
+    --text-main: #2A2A2A; /* Anthracite lisible */
+    --text-light: #555555;
+    --accent-color: #C84B31; /* Terracotta / Flamenco */
+    --accent-hover: #A03A24;
+    --card-bg: #FFFFFF;
+    --border-radius: 12px;
+    --transition: all 0.3s ease;
+}
+
+/* Reset et typographie globale */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
     line-height: 1.6;
-    max-width: 800px;
-    margin: 40px auto;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
     padding: 0 20px;
-    color: #333;
-    background-color: #f9f9f9;
 }
 
-header {
-    border-bottom: 2px solid #333;
-    padding-bottom: 20px;
-    margin-bottom: 30px;
+/* Navigation Moderne */
+.navbar {
+    background-color: var(--bg-color);
+    padding: 20px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 
-nav ul {
+.nav-content {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--accent-color);
+    letter-spacing: 1px;
+}
+
+.nav-links {
     list-style: none;
-    padding: 0;
+    display: flex;
+    gap: 30px;
 }
 
-nav ul li {
-    display: inline;
-    margin-right: 15px;
+.nav-links a {
+    text-decoration: none;
+    color: var(--text-main);
+    font-weight: 500;
+    transition: var(--transition);
 }
 
-#hero-animation video {
-    width: 100%;
-    max-height: 400px;
+.nav-links a:hover, .nav-links a.active {
+    color: var(--accent-color);
+}
+
+/* Section Hero (Vidéo d'accueil) */
+.hero {
+    position: relative;
+    height: 70vh; /* Prend 70% de l'écran */
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    overflow: hidden;
+    margin-bottom: 60px;
+}
+
+.hero-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    transform: translateX(-50%) translateY(-50%);
+    z-index: -2;
     object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 30px;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Assombrit la vidéo pour la lisibilité */
+    z-index: -1;
+}
+
+.hero-content h1 {
+    font-size: 3.5rem;
+    margin-bottom: 10px;
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+.hero-content h2 {
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin-bottom: 20px;
+    opacity: 0.9;
+}
+
+.hero-content p {
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+    opacity: 0.8;
+}
+
+/* Section Parcours */
+.about-section {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 50px;
+    margin-bottom: 80px;
+}
+
+.about-text h3 {
+    font-size: 2rem;
+    color: var(--accent-color);
+    margin-bottom: 20px;
+}
+
+.about-text p {
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+    color: var(--text-light);
+}
+
+.about-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.stat-card {
+    background-color: var(--card-bg);
+    padding: 30px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+    border-left: 4px solid var(--accent-color);
+}
+
+.stat-card h4 {
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+/* Pied de page */
+footer {
+    background-color: var(--card-bg);
+    padding: 40px 0;
+    margin-top: 60px;
+    border-top: 1px solid #EAEAEA;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-light);
+}
+
+.btn-link {
+    text-decoration: none;
+    color: var(--accent-color);
+    font-weight: 600;
 }
