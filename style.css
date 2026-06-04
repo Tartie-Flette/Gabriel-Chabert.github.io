@@ -1,13 +1,15 @@
 /* Variables CSS : Le cœur de ton identité visuelle */
 :root {
-    --bg-color: #FDFBF7; /* Un crème chaleureux */
-    --text-main: #2A2A2A; /* Anthracite lisible */
+    --bg-color: #FDFBF7;
+    --text-main: #2A2A2A;
     --text-light: #555555;
-    --accent-color: #C84B31; /* Terracotta / Flamenco */
-    --accent-hover: #A03A24;
+    --accent-color: #C84B31; /* Terracotta profond */
+    --accent-warm: #E27D60; /* Orange cuivré */
+    --accent-gold: #E8A87C; /* Ocre doré */
     --card-bg: #FFFFFF;
-    --border-radius: 12px;
-    --transition: all 0.3s ease;
+    --border-radius: 16px;
+    /* Courbe de Bézier pour un effet "ressort" physique au survol */
+    --transition-bounce: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 /* Reset et typographie globale */
@@ -189,4 +191,72 @@ footer {
     text-decoration: none;
     color: var(--accent-color);
     font-weight: 600;
+}
+
+/* Animations */
+/* Effet innovant : Dégradé textuel chaleureux */
+.gradient-text {
+    background: linear-gradient(135deg, var(--accent-color), var(--accent-gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+}
+
+/* Grille interactive pour les compétences */
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 25px;
+    margin-top: 30px;
+    width: 100%;
+}
+
+.skill-card {
+    background: var(--card-bg);
+    padding: 30px 20px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 10px 30px rgba(200, 75, 49, 0.05); /* Ombre teintée terracotta */
+    border-bottom: 4px solid var(--accent-warm);
+    transition: var(--transition-bounce);
+    position: relative;
+    overflow: hidden;
+}
+
+.skill-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent-color), var(--accent-gold));
+    opacity: 0;
+    transition: var(--transition-bounce);
+}
+
+.skill-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(200, 75, 49, 0.15);
+    border-bottom-color: transparent;
+}
+
+.skill-card:hover::before {
+    opacity: 1;
+}
+
+.skill-card h4 {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    color: var(--text-main);
+}
+
+.skill-tag {
+    display: inline-block;
+    background-color: var(--bg-color);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    margin: 4px;
+    color: var(--accent-color);
+    border: 1px solid rgba(200, 75, 49, 0.2);
 }
