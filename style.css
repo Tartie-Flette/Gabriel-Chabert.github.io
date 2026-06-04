@@ -291,3 +291,57 @@ footer {
     color: var(--accent-color);
     font-weight: 600;
 }
+
+
+
+/* --- ADAPTATION MOBILE (MEDIA QUERIES) --- */
+@media screen and (max-width: 768px) {
+    /* Ajustement de la navigation */
+    .nav-content {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .nav-links {
+        gap: 20px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    /* Réduction des titres dans le Hero */
+    .hero-content h1 {
+        font-size: 2.2rem;
+    }
+
+    .hero-content h2 {
+        font-size: 1.2rem;
+    }
+    
+    .hero-content p {
+        font-size: 1rem;
+        padding: 0 15px;
+    }
+
+    /* Restructuration de la section Parcours */
+    .about-section {
+        grid-template-columns: 1fr; /* Passe de 2 colonnes à 1 seule colonne */
+        gap: 30px;
+    }
+
+    /* Ajustement de la ligne de temps du CV */
+    .timeline {
+        margin-left: 10px;
+        padding-left: 20px;
+    }
+
+    .timeline-item::before {
+        left: -30px;
+        width: 14px;
+        height: 14px;
+    }
+    
+    /* Marges globales */
+    .container {
+        padding: 0 15px;
+    }
+}
