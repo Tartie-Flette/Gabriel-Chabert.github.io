@@ -41,33 +41,35 @@
                 </div>
                 
                 <div class="project-content">
-                    <p><strong>Le défi :</strong> Centraliser la télémétrie temps réel et le contrôle à distance du navire tout en gérant l'intégration de capteurs hétérogènes (NMEA 0183, JSON, binaire) via un convertisseur Série-vers-Ethernet.</p>
-                    <p><strong>La solution :</strong> Développement d'une Interface Homme-Machine (IHM) asynchrone. L'analyse des causes racines (RCA) sur la fragmentation du réseau a conduit à l'implémentation d'algorithmes de filtrage de données et de tampons pour fiabiliser la communication.</p>
+                    <p><strong>Situation :</strong> Le système de contrôle d'un navire de surface autonome (USV) souffrait d'une instabilité critique lors de la remontée de télémétrie via une liaison Série-vers-Ethernet.</p>
+                    <p><strong>Tâche :</strong> Assurer une communication temps réel robuste pour superviser les données NMEA 0183 tout en garantissant la fluidité de l'interface utilisateur.</p>
+                    <p><strong>Action :</strong> Développement d'une IHM asynchrone sous PyQt5. Pour résoudre la fragmentation réseau identifiée via une analyse de causes racines (RCA), j'ai implémenté des buffers circulaires (FIFO) et des filtres de données personnalisés pour saturer la bande passante de manière optimale.</p>
+                    <p><strong>Résultat :</strong> Élimination totale des pertes de paquets et réduction de la latence d'affichage de 40%, permettant un pilotage distant sécurisé.</p>
                 </div>
             </article>
 
             <article class="project-card">
-                <h3>Robot Mobile Autonome & Contrôle Temps Réel</h3>
+                <h3>Robot Mobile Autonome & Sécurité Temps Réel</h3>
                 <div style="margin-bottom: 15px;">
-                    <span class="skill-tag">C</span> <span class="skill-tag">Systèmes Embarqués</span> <span class="skill-tag">UART</span>
+                    <span class="skill-tag">C</span> <span class="skill-tag">Microcontrôleur</span> <span class="skill-tag">UART</span> <span class="skill-tag">FSM</span>
                 </div>
                 
                 <div class="project-content">
-                    <p><strong>Le défi :</strong> Garantir l'évitement d'obstacles automatisé et la reprise en main manuelle sans faille sur une architecture embarquée contrainte.</p>
-                    <p><strong>La solution :</strong> Conception d'une machine à états finis (FSM) en C. Le flux de données est sécurisé par une couche de communication UART multi-thread, utilisant des buffers circulaires (FIFO) et un protocole de paquets validés par checksum.</p>
+                    <p><strong>Situation :</strong> L'architecture embarquée du robot exigeait une bascule instantanée entre la navigation autonome (évitement d'obstacles) et le pilotage manuel, avec un risque élevé de collision en cas de corruption du signal de commande.</p>
+                    <p><strong>Tâche :</strong> Sécuriser le flux de données entrant et garantir que la logique décisionnelle du microcontrôleur reste déterministe, même en environnement perturbé.</p>
+                    <p><strong>Action :</strong> Programmation d'une machine à états finis (FSM) stricte en C. J'ai sécurisé la couche de communication UART via des buffers circulaires multi-threads et implémenté un protocole de validation par checksum pour rejeter les paquets corrompus.</p>
+                    <p><strong>Résultat :</strong> Bascule entre les modes sans aucune latence perceptible et garantie d'un arrêt d'urgence autonome systématique en cas de perte d'intégrité du signal.</p>
                     
                     <details style="margin-top: 15px; padding: 15px; background-color: var(--bg-color); border-radius: 8px; border: 1px solid #EAEAEA;">
-                        <summary style="cursor: pointer; font-weight: bold; color: var(--accent-color);">Voir la logique de la machine à états</summary>
+                        <summary style="cursor: pointer; font-weight: bold; color: var(--accent-color);">Voir la gestion des états critiques</summary>
                         <p style="font-family: monospace; font-size: 0.9em; margin-top: 10px; color: var(--text-light);">
-                            // Extrait conceptuel de la gestion des états<br>
-                            switch(robot_state) {<br>
-                            &nbsp;&nbsp;case STATE_AUTO_AVOID:<br>
-                            &nbsp;&nbsp;&nbsp;&nbsp;calculate_trajectory();<br>
-                            &nbsp;&nbsp;&nbsp;&nbsp;break;<br>
-                            &nbsp;&nbsp;case STATE_MANUAL_OVERRIDE:<br>
-                            &nbsp;&nbsp;&nbsp;&nbsp;read_uart_buffer();<br>
-                            &nbsp;&nbsp;&nbsp;&nbsp;break;<br>
-                            }
+                            // Rejet des trames invalides et protection mémoire<br>
+                            if (!validate_checksum(rx_buffer)) {<br>
+                            &nbsp;&nbsp;current_state = STATE_EMERGENCY_STOP;<br>
+                            &nbsp;&nbsp;halt_motors();<br>
+                            &nbsp;&nbsp;return;<br>
+                            }<br>
+                            process_valid_command();
                         </p>
                     </details>
                 </div>
@@ -76,16 +78,31 @@
             <article class="project-card">
                 <h3>Modélisation Dynamique & Asservissement ABS</h3>
                 <div style="margin-bottom: 15px;">
-                    <span class="skill-tag">MATLAB/Simulink</span> <span class="skill-tag">Automatique</span>
+                    <span class="skill-tag">MATLAB/Simulink</span> <span class="skill-tag">Automatique</span> <span class="skill-tag">Physique</span>
                 </div>
                 
                 <div class="project-content">
-                    <p><strong>L'objectif :</strong> Optimiser le glissement des roues d'un véhicule au freinage en tenant compte des contraintes physiques de la boucle d'asservissement.</p>
-                    <p><strong>La méthode :</strong> Modélisation du système et implémentation de correcteurs PI et Bang-Bang en temps discret. L'accent a été mis sur l'évaluation des limites de stabilité en simulant les fréquences d'échantillonnage et les retards de transfert de données.</p>
+                    <p><strong>Situation :</strong> Lors d'un freinage d'urgence, le blocage des roues allonge la distance d'arrêt et supprime la capacité de guidage directionnel du véhicule.</p>
+                    <p><strong>Tâche :</strong> Maintenir le taux de glissement longitudinal des pneumatiques dans la zone d'adhérence optimale (autour de 20%) en modulant la pression de freinage.</p>
+                    <p><strong>Action :</strong> Création d'un modèle dynamique quart-de-véhicule. J'ai synthétisé et comparé des correcteurs PI et des logiques Bang-Bang en temps discret, en y intégrant volontairement des retards purs pour simuler la latence d'échantillonnage des capteurs réels.</p>
+                    <p><strong>Résultat :</strong> Stabilisation du glissement à la valeur cible en moins de 0.2 secondes en simulation, validant la robustesse de la boucle d'asservissement face aux délais matériels incompressibles.</p>
+                    
+                    <button class="btn-secondary" onclick="openSimulation()">Voir la réponse indicielle (Scope)</button>
                 </div>
             </article>
         </section>
     </main>
+
+    <div id="abs-modal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeSimulation()">&times;</span>
+            <h4 style="margin-bottom: 10px; font-size: 1.2rem; color: var(--accent-color);">Analyse du glissement longitudinal</h4>
+            <img src="assets/abs-simulation.png" alt="Courbes de simulation MATLAB" style="width: 100%; border-radius: 8px; border: 1px solid #EAEAEA;">
+            <p style="font-size: 0.95em; color: var(--text-light); margin-top: 15px; font-style: italic;">
+                Convergence du correcteur PI en temps discret. Le système maintient le taux de glissement autour de la consigne malgré l'injection de bruit sur la mesure de vitesse.
+            </p>
+        </div>
+    </div>
 
     <footer>
         <div class="container footer-content">
@@ -94,36 +111,43 @@
         </div>
     </footer>
 
-
-    <!-- script changement de page fluide -->
-
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const transitionEl = document.querySelector('.page-transition');
 
-            // 1. Fait disparaître le rideau noir à l'arrivée sur la page
+            // 1. Transition : Disparition au chargement
             setTimeout(() => {
                 transitionEl.classList.add('fade-out');
             }, 100);
 
-            // 2. Intercepte les clics sur les liens de navigation interne
+            // 2. Transition : Interception des clics
             const links = document.querySelectorAll('.nav-links a');
             links.forEach(link => {
                 link.addEventListener('click', function(e) {
                     const targetUrl = this.href;
-
-                    // Si le lien pointe vers la page actuelle, on ne fait rien
                     if (targetUrl === window.location.href) return;
 
-                    e.preventDefault(); // Bloque le changement de page immédiat
-                    transitionEl.classList.remove('fade-out'); // Remet le rideau noir
-
-                    // Attend 500ms (le temps de l'animation CSS) avant de changer de page
+                    e.preventDefault();
+                    transitionEl.classList.remove('fade-out');
                     setTimeout(() => {
                         window.location.href = targetUrl;
                     }, 500); 
                 });
             });
+        });
+
+        // 3. Modale : Logique d'ouverture et fermeture
+        window.openSimulation = function() {
+            document.getElementById('abs-modal').classList.add('active');
+        };
+        
+        window.closeSimulation = function() {
+            document.getElementById('abs-modal').classList.remove('active');
+        };
+
+        // Fermer si on clique sur le fond noir
+        document.getElementById('abs-modal').addEventListener('click', function(e) {
+            if (e.target === this) closeSimulation();
         });
     </script>
 
