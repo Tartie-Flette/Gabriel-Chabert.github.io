@@ -151,5 +151,31 @@
         });
     </script>
 
+    <script>
+        // Fonction pour ouvrir la modale
+        function openSimulation() {
+            const modal = document.getElementById('abs-modal');
+            if (modal) {
+                modal.classList.add('active');
+            }
+        }
+
+        // Fonction pour fermer la modale
+        function closeSimulation() {
+            const modal = document.getElementById('abs-modal');
+            if (modal) {
+                modal.classList.remove('active');
+            }
+        }
+
+        // Optionnel mais recommandé : fermer la modale si on clique en dehors de la fenêtre
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('abs-modal');
+            if (event.target === modal) {
+                closeSimulation();
+            }
+        });
+    </script>
+
 </body>
 </html>
