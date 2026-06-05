@@ -16,7 +16,11 @@
 <body>
 
     <div class="page-transition">
-        <img src="assets/favicon.svg" alt="Logo de chargement">
+        <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <rect width="512" height="512" rx="112" fill="#C84B31"/>
+            <text x="48%" y="54%" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="250" fill="#FDFBF7" text-anchor="middle" dominant-baseline="middle" letter-spacing="-15">GC</text>
+            <circle cx="390" cy="350" r="28" fill="#E8A87C"/>
+        </svg>
     </div>
 
     <nav class="navbar">
@@ -112,42 +116,38 @@
     </footer>
 
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const transitionEl = document.querySelector('.page-transition');
+        // 1. Gère le chargement initial ET le bouton "Retour" de la souris
+        window.addEventListener('pageshow', function() {
+            const transition = document.querySelector('.page-transition');
+            if (transition) {
+                // Un micro-délai permet au navigateur de dessiner la page avant d'enlever le voile
+                setTimeout(() => {
+                    transition.classList.add('is-hidden');
+                }, 50);
+            }
+        });
 
-            // 1. Transition : Disparition au chargement
-            setTimeout(() => {
-                transitionEl.classList.add('fade-out');
-            }, 100);
-
-            // 2. Transition : Interception des clics
+        // 2. Intercepte les clics sur la navigation
+        document.addEventListener('DOMContentLoaded', () => {
             const links = document.querySelectorAll('.nav-links a');
+            
             links.forEach(link => {
                 link.addEventListener('click', function(e) {
                     const targetUrl = this.href;
-                    if (targetUrl === window.location.href) return;
+                    
+                    // Ignore le clic si on est déjà sur la page ou si c'est un lien externe
+                    if (targetUrl === window.location.href || this.target === '_blank') return;
 
                     e.preventDefault();
-                    transitionEl.classList.remove('fade-out');
+                    const transition = document.querySelector('.page-transition');
+                    transition.classList.remove('is-hidden');
+                    
+                    // Le délai correspond exactement à la durée de la transition CSS (600ms)
                     setTimeout(() => {
                         window.location.href = targetUrl;
-                    }, 500); 
+                    }, 600);
                 });
             });
-        });
-
-        // 3. Modale : Logique d'ouverture et fermeture
-        window.openSimulation = function() {
-            document.getElementById('abs-modal').classList.add('active');
-        };
-        
-        window.closeSimulation = function() {
-            document.getElementById('abs-modal').classList.remove('active');
-        };
-
-        // Fermer si on clique sur le fond noir
-        document.getElementById('abs-modal').addEventListener('click', function(e) {
-            if (e.target === this) closeSimulation();
         });
     </script>
 
