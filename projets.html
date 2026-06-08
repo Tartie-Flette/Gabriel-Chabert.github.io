@@ -35,12 +35,12 @@
     </nav>
 
     <main class="container">
-        <h3 style="margin-top: 60px; font-size: 2.5rem; text-align: center; margin-bottom: 40px;">Études de <span class="gradient-text">Cas Techniques</span></h3>
+        <h3 class="page-title">Études de <span class="gradient-text">Cas Techniques</span></h3>
         
         <section>
             <article class="project-card">
                 <h3>Intégration Système USV BlueBoat & IHM Asynchrone</h3>
-                <div style="margin-bottom: 15px;">
+                <div class="project-tags">
                     <span class="skill-tag">Python</span> <span class="skill-tag">ROS 2</span> <span class="skill-tag">PyQt5</span> <span class="skill-tag">TCP/IP</span>
                 </div>
                 
@@ -54,7 +54,7 @@
 
             <article class="project-card">
                 <h3>Robot Mobile Autonome & Sécurité Temps Réel</h3>
-                <div style="margin-bottom: 15px;">
+                <div class="project-tags">
                     <span class="skill-tag">C</span> <span class="skill-tag">Microcontrôleur</span> <span class="skill-tag">UART</span> <span class="skill-tag">FSM</span>
                 </div>
                 
@@ -64,9 +64,9 @@
                     <p><strong>Action :</strong> Programmation d'une machine à états finis (FSM) stricte en C. J'ai sécurisé la couche de communication UART via des buffers circulaires multi-threads et implémenté un protocole de validation par checksum pour rejeter les paquets corrompus.</p>
                     <p><strong>Résultat :</strong> Bascule entre les modes sans aucune latence perceptible et garantie d'un arrêt d'urgence autonome systématique en cas de perte d'intégrité du signal.</p>
                     
-                    <details style="margin-top: 15px; padding: 15px; background-color: var(--bg-color); border-radius: 8px; border: 1px solid #EAEAEA;">
-                        <summary style="cursor: pointer; font-weight: bold; color: var(--accent-color);">Voir la gestion des états critiques</summary>
-                        <p style="font-family: monospace; font-size: 0.9em; margin-top: 10px; color: var(--text-light);">
+                    <details class="project-details">
+                        <summary>Voir la gestion des états critiques</summary>
+                        <p class="code-snippet">
                             // Rejet des trames invalides et protection mémoire<br>
                             if (!validate_checksum(rx_buffer)) {<br>
                             &nbsp;&nbsp;current_state = STATE_EMERGENCY_STOP;<br>
@@ -81,7 +81,7 @@
 
             <article class="project-card">
                 <h3>Modélisation Dynamique & Asservissement ABS</h3>
-                <div style="margin-bottom: 15px;">
+                <div class="project-tags">
                     <span class="skill-tag">MATLAB/Simulink</span> <span class="skill-tag">Automatique</span> <span class="skill-tag">Physique</span>
                 </div>
                 
@@ -99,10 +99,10 @@
 
     <div id="abs-modal" class="modal-overlay">
         <div class="modal-content">
-            <span class="close-modal" onclick="closeSimulation()">&times;</span>
-            <h4 style="margin-bottom: 10px; font-size: 1.2rem; color: var(--accent-color);">Analyse du glissement longitudinal</h4>
-            <img src="assets/abs-simulation.png" alt="Courbes de simulation MATLAB" style="width: 100%; border-radius: 8px; border: 1px solid #EAEAEA;">
-            <p style="font-size: 0.95em; color: var(--text-light); margin-top: 15px; font-style: italic;">
+            <button class="close-modal" onclick="closeSimulation()" aria-label="Fermer la fenêtre">&times;</button>
+            <h4 class="modal-title">Analyse du glissement longitudinal</h4>
+            <img src="assets/abs-simulation.png" alt="Courbes de simulation MATLAB" class="modal-image">
+            <p class="modal-caption">
                 Convergence du correcteur PI en temps discret. Le système maintient le taux de glissement autour de la consigne malgré l'injection de bruit sur la mesure de vitesse.
             </p>
         </div>
@@ -111,48 +111,39 @@
     <footer>
         <div class="container footer-content">
             <p>© 2026 Gabriel Chabert | Région Parisienne</p>
-            <a href="https://www.linkedin.com/in/gabriel-chabert" target="_blank" class="btn-link">LinkedIn</a>
+            <a href="https://www.linkedin.com/in/gabriel-chabert-b0ba68243" target="_blank" rel="noopener noreferrer" class="btn-link">LinkedIn</a>
         </div>
     </footer>
 
     <script>
-        // 1. Gère le chargement initial ET le bouton "Retour" de la souris
         window.addEventListener('pageshow', function() {
             const transition = document.querySelector('.page-transition');
             if (transition) {
-                // Un micro-délai permet au navigateur de dessiner la page avant d'enlever le voile
                 setTimeout(() => {
                     transition.classList.add('is-hidden');
                 }, 50);
             }
         });
 
-        // 2. Intercepte les clics sur la navigation
         document.addEventListener('DOMContentLoaded', () => {
             const links = document.querySelectorAll('.nav-links a');
             
             links.forEach(link => {
                 link.addEventListener('click', function(e) {
                     const targetUrl = this.href;
-                    
-                    // Ignore le clic si on est déjà sur la page ou si c'est un lien externe
                     if (targetUrl === window.location.href || this.target === '_blank') return;
 
                     e.preventDefault();
                     const transition = document.querySelector('.page-transition');
                     transition.classList.remove('is-hidden');
                     
-                    // Le délai correspond exactement à la durée de la transition CSS (600ms)
                     setTimeout(() => {
                         window.location.href = targetUrl;
                     }, 600);
                 });
             });
         });
-    </script>
 
-    <script>
-        // Fonction pour ouvrir la modale
         function openSimulation() {
             const modal = document.getElementById('abs-modal');
             if (modal) {
@@ -160,7 +151,6 @@
             }
         }
 
-        // Fonction pour fermer la modale
         function closeSimulation() {
             const modal = document.getElementById('abs-modal');
             if (modal) {
@@ -168,7 +158,6 @@
             }
         }
 
-        // Optionnel mais recommandé : fermer la modale si on clique en dehors de la fenêtre
         window.addEventListener('click', function(event) {
             const modal = document.getElementById('abs-modal');
             if (event.target === modal) {

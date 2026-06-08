@@ -104,13 +104,13 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(17, 17, 17, 0.65); /* Filtre anthracite pour la lisibilité */
+    background: rgba(17, 17, 17, 0.65);
     z-index: 1;
 }
 
 .hero-content {
     position: relative;
-    z-index: 2; /* Force le texte au-dessus du filtre */
+    z-index: 2;
 }
 
 .hero-content h1 {
@@ -328,7 +328,6 @@ footer {
     color: #FFFFFF;
 }
 
-
 /* --- TRANSITION DE PAGE FLUIDE --- */
 .page-transition {
     position: fixed;
@@ -341,7 +340,6 @@ footer {
     display: flex;
     justify-content: center;
     align-items: center;
-    /* Visible par défaut à l'ouverture de la page */
     opacity: 1; 
     pointer-events: auto;
     transition: opacity 0.6s cubic-bezier(0.8, 0, 0.2, 1);
@@ -352,7 +350,6 @@ footer {
     pointer-events: none;
 }
 
-/* Le SVG en ligne s'anime plus doucement */
 .page-transition svg {
     width: 90px;
     height: 90px;
@@ -427,6 +424,8 @@ footer {
     right: 25px;
     font-size: 2rem;
     cursor: pointer;
+    background: none;
+    border: none;
     color: var(--text-light);
     transition: var(--transition);
 }
@@ -435,16 +434,120 @@ footer {
     color: var(--accent-color);
 }
 
+/* --- STYLES NETTOYÉS (AJOUTS) --- */
+.page-title {
+    margin-top: 60px;
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 40px;
+}
 
+.page-title.no-margin {
+    margin-bottom: 0;
+}
 
+.intro-section {
+    display: block;
+    margin-bottom: 80px;
+}
 
+.intro-header {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
 
+.intro-title {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
 
+.intro-text {
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+    color: var(--text-light);
+}
 
+.intro-text.spaced {
+    margin-bottom: 40px;
+}
+
+.project-tags {
+    margin-bottom: 15px;
+}
+
+.project-details {
+    margin-top: 15px;
+    padding: 15px;
+    background-color: var(--bg-color);
+    border-radius: 8px;
+    border: 1px solid #EAEAEA;
+}
+
+.project-details summary {
+    cursor: pointer;
+    font-weight: bold;
+    color: var(--accent-color);
+}
+
+.code-snippet {
+    font-family: monospace;
+    font-size: 0.9em;
+    margin-top: 10px;
+    color: var(--text-light);
+}
+
+.modal-title {
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+    color: var(--accent-color);
+}
+
+.modal-image {
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid #EAEAEA;
+}
+
+.modal-caption {
+    font-size: 0.95em;
+    color: var(--text-light);
+    margin-top: 15px;
+    font-style: italic;
+}
+
+/* Page 404 */
+.error-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+}
+
+.error-title {
+    font-size: 6rem;
+    color: var(--accent-color);
+    margin-bottom: 0;
+    line-height: 1;
+}
+
+.error-subtitle {
+    font-size: 2rem;
+    color: var(--text-main);
+    margin-bottom: 20px;
+}
+
+.error-text {
+    color: var(--text-light);
+    max-width: 500px;
+    margin-bottom: 40px;
+    font-size: 1.1rem;
+}
 
 /* --- ADAPTATION MOBILE (MEDIA QUERIES) --- */
 @media screen and (max-width: 768px) {
-    /* Ajustement de la navigation */
     .nav-content {
         flex-direction: column;
         gap: 15px;
@@ -456,7 +559,6 @@ footer {
         justify-content: center;
     }
 
-    /* Réduction des titres dans le Hero */
     .hero-content h1 {
         font-size: 2.2rem;
     }
@@ -470,13 +572,11 @@ footer {
         padding: 0 15px;
     }
 
-    /* Restructuration de la section Parcours */
     .about-section {
-        grid-template-columns: 1fr; /* Passe de 2 colonnes à 1 seule colonne */
+        grid-template-columns: 1fr;
         gap: 30px;
     }
 
-    /* Ajustement de la ligne de temps du CV */
     .timeline {
         margin-left: 10px;
         padding-left: 20px;
@@ -488,7 +588,6 @@ footer {
         height: 14px;
     }
     
-    /* Marges globales */
     .container {
         padding: 0 15px;
     }

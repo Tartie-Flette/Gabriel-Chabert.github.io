@@ -45,11 +45,11 @@
     </header>
 
     <main class="container">
-        <section style="display: block; margin-bottom: 80px;">
-            <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-                <h3 style="font-size: 2rem; margin-bottom: 20px;">La technique au service de <span class="gradient-text">l'autonomie</span></h3>
-                <p style="margin-bottom: 20px; font-size: 1.1rem; color: var(--text-light);">De la modélisation de la dynamique d'un véhicule sous MATLAB à l'intégration de faisceaux électriques sur des prototypes roulants, mon approche de l'ingénierie vise à créer un pont robuste entre la contrainte matérielle et l'intelligence logicielle.</p>
-                <p style="margin-bottom: 40px; font-size: 1.1rem; color: var(--text-light);">La conception d'un système complexe exige une discipline et un sens de l'équilibre. Il ne s'agit pas seulement de faire fonctionner une machine, mais de la rendre fiable, maintenable et élégante.</p>
+        <section class="intro-section">
+            <div class="intro-header">
+                <h3 class="intro-title">La technique au service de <span class="gradient-text">l'autonomie</span></h3>
+                <p class="intro-text">De la modélisation de la dynamique d'un véhicule sous MATLAB à l'intégration de faisceaux électriques sur des prototypes roulants, mon approche de l'ingénierie vise à créer un pont robuste entre la contrainte matérielle et l'intelligence logicielle.</p>
+                <p class="intro-text spaced">La conception d'un système complexe exige une discipline et un sens de l'équilibre. Il ne s'agit pas seulement de faire fonctionner une machine, mais de la rendre fiable, maintenable et élégante.</p>
             </div>
             
             <div class="skills-grid">
@@ -88,41 +88,32 @@
     <footer>
         <div class="container footer-content">
             <p>© 2026 Gabriel Chabert | Région Parisienne</p>
-            <a href="https://www.linkedin.com/in/gabriel-chabert" target="_blank" class="btn-link">LinkedIn</a>
+            <a href="https://www.linkedin.com/in/gabriel-chabert-b0ba68243" target="_blank" rel="noopener noreferrer" class="btn-link">LinkedIn</a>
         </div>
     </footer>
 
-
-    <!-- script changement de page fluide -->
-
     <script>
-        // 1. Gère le chargement initial ET le bouton "Retour" de la souris
         window.addEventListener('pageshow', function() {
             const transition = document.querySelector('.page-transition');
             if (transition) {
-                // Un micro-délai permet au navigateur de dessiner la page avant d'enlever le voile
                 setTimeout(() => {
                     transition.classList.add('is-hidden');
                 }, 50);
             }
         });
 
-        // 2. Intercepte les clics sur la navigation
         document.addEventListener('DOMContentLoaded', () => {
             const links = document.querySelectorAll('.nav-links a');
             
             links.forEach(link => {
                 link.addEventListener('click', function(e) {
                     const targetUrl = this.href;
-                    
-                    // Ignore le clic si on est déjà sur la page ou si c'est un lien externe
                     if (targetUrl === window.location.href || this.target === '_blank') return;
 
                     e.preventDefault();
                     const transition = document.querySelector('.page-transition');
                     transition.classList.remove('is-hidden');
                     
-                    // Le délai correspond exactement à la durée de la transition CSS (600ms)
                     setTimeout(() => {
                         window.location.href = targetUrl;
                     }, 600);

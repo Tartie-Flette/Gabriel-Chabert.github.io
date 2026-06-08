@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Introuvable | Gabriel Chabert</title>
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="page-transition">
+        <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <rect width="512" height="512" rx="112" fill="#C84B31"/>
+            <text x="48%" y="54%" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="250" fill="#FDFBF7" text-anchor="middle" dominant-baseline="middle" letter-spacing="-15">GC</text>
+            <circle cx="390" cy="350" r="28" fill="#E8A87C"/>
+        </svg>
+    </div>
+
+    <main class="container error-container">
+        <h1 class="error-title">404</h1>
+        <h2 class="error-subtitle">Système hors ligne</h2>
+        <p class="error-text">La route que vous cherchez n'existe pas ou a été reconfigurée. Reprenons la navigation depuis le point de départ.</p>
+        <a href="index.html" class="btn-primary">Retour à l'accueil</a>
+    </main>
+
+    <script>
+        window.addEventListener('pageshow', function() {
+            const transition = document.querySelector('.page-transition');
+            if (transition) {
+                setTimeout(() => {
+                    transition.classList.add('is-hidden');
+                }, 50);
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.querySelector('.btn-primary');
+            if (btn) {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetUrl = this.href;
+                    const transition = document.querySelector('.page-transition');
+                    transition.classList.remove('is-hidden');
+                    
+                    setTimeout(() => {
+                        window.location.href = targetUrl;
+                    }, 600);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
