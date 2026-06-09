@@ -103,25 +103,31 @@
     </footer>
 
     <script>
-        window.addEventListener('pageshow', function() {
+        // 1. Gère l'arrivée sur la page (Chargement initial + bouton "Retour")
+        window.addEventListener('pageshow', function(event) {
             const transition = document.querySelector('.page-transition');
             if (transition) {
+                // Petit délai pour laisser le navigateur dessiner la page
                 setTimeout(() => {
-                    transition.classList.add('is-hidden');
+                    transition.classList.add('is-hidden'); // Le logo passe de 1.1 à 0.8
                 }, 50);
             }
         });
 
+        // 2. Gère le départ de la page (Clic sur les liens)
         document.addEventListener('DOMContentLoaded', () => {
-            const links = document.querySelectorAll('.nav-links a');
+            const links = document.querySelectorAll('.nav-links a, .btn-primary[href="index.html"]');
             
             links.forEach(link => {
                 link.addEventListener('click', function(e) {
                     const targetUrl = this.href;
-                    if (targetUrl === window.location.href || this.target === '_blank') return;
+                    
+                    if (targetUrl === window.location.href || this.target === '_blank' || targetUrl.includes('#')) return;
 
                     e.preventDefault();
                     const transition = document.querySelector('.page-transition');
+                    
+                    // En enlevant "is-hidden", le logo repasse naturellement à sa taille par défaut (1.1)
                     transition.classList.remove('is-hidden');
                     
                     setTimeout(() => {
