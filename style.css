@@ -93,7 +93,7 @@ body {
     text-align: center;
     color: white;
     margin-bottom: 60px;
-    background-image: url('assets/og-image.jpg');
+    background-image: url('assets/og-image.png');
     background-size: cover;
     background-position: center;
 }
@@ -256,6 +256,16 @@ body {
     font-size: 1.3rem;
     color: var(--text-main);
     margin-bottom: 2px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.timeline-icon {
+    width: 24px;
+    height: 24px;
+    color: var(--accent-color);
+    flex-shrink: 0;
 }
 
 .timeline-subtitle {
