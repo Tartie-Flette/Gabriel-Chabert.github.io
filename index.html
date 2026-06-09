@@ -12,6 +12,31 @@
     <meta property="og:url" content="https://tartie-flette.github.io/Gabriel-Chabert.github.io/">
     <meta property="og:type" content="website">
     <link rel="stylesheet" href="style.css">
+
+    <script type="application/ld+json">
+        {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Gabriel Chabert",
+        "jobTitle": "Ingénieur Systèmes Embarqués & Robotique",
+        "address": {
+            "@type": "PostalAddress",
+            "addressRegion": "Région Parisienne",
+            "addressCountry": "France"
+        },
+        "alumniOf": {
+            "@type": "EducationalOrganization",
+            "name": "École d'Ingénieurs SeaTech"
+        },
+        "worksFor": {
+            "@type": "Organization",
+            "name": "Circle Mobility"
+        },
+        "sameAs": [
+            "https://www.linkedin.com/in/gabriel-chabert-b0ba68243"
+        ]
+        }
+    </script>
 </head>
 <body>
 
@@ -81,7 +106,7 @@
             <div class="cta-content">
                 <h3>Prêt à concevoir des systèmes fiables ?</h3>
                 <p>Qu'il s'agisse d'architectures embarquées ou d'intégration robotique, parlons de vos défis techniques.</p>
-                <a href="mailto:gabriel.chabert.s@gmail.com" class="btn-primary">Me contacter</a>
+                <button type="button" class="btn-primary" id="email-btn">Me contacter</button>
             </div>
     </section>
 
@@ -93,40 +118,67 @@
     </footer>
 
     <script>
-        // 1. Gère l'arrivée sur la page (Chargement initial + bouton "Retour")
+        // 1. Gère l'arrivée sur la page (Chargement initial, rechargement ou bouton "Retour")
         window.addEventListener('pageshow', function(event) {
             const transition = document.querySelector('.page-transition');
             if (transition) {
-                // Petit délai pour laisser le navigateur dessiner la page
+                // Petit délai pour laisser le navigateur dessiner la page avant d'ouvrir le voile
                 setTimeout(() => {
                     transition.classList.add('is-hidden'); // Le logo passe de 1.1 à 0.8
                 }, 50);
             }
         });
 
-        // 2. Gère le départ de la page (Clic sur les liens)
+        // 2. Gère le départ de la page (Clic sur TOUS les liens de navigation)
         document.addEventListener('DOMContentLoaded', () => {
-            const links = document.querySelectorAll('.nav-links a, .btn-primary[href="index.html"]');
+            // On cible absolument tous les liens <a> de la page pour éviter les oublis (logo inclus)
+            const links = document.querySelectorAll('a');
             
             links.forEach(link => {
                 link.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
                     const targetUrl = this.href;
                     
-                    if (targetUrl === window.location.href || this.target === '_blank' || targetUrl.includes('#')) return;
+                    // SÉCURITÉ : On ignore le script si le lien est externe, si c'est une ancre (#) ou un mailto
+                    if (this.target === '_blank' || !href || href.startsWith('#') || href.startsWith('mailto:')) {
+                        return; 
+                    }
 
+                    // On stoppe le comportement par défaut pour lancer notre animation
                     e.preventDefault();
                     const transition = document.querySelector('.page-transition');
                     
-                    // En enlevant "is-hidden", le logo repasse naturellement à sa taille par défaut (1.1)
+                    // On fait réapparaître le voile noir (le logo reprend sa taille max de 1.1)
                     transition.classList.remove('is-hidden');
                     
+                    // On attend la fin exacte de la transition CSS (600ms) avant de changer/recharger la page
                     setTimeout(() => {
                         window.location.href = targetUrl;
                     }, 600);
                 });
             });
         });
+
+        // 3. Gère le clic sur le bouton "Me contacter" pour copier l'e-mail dans le presse-papiers
+        document.getElementById('email-btn').addEventListener('click', function() {
+            const btn = this;
+            const email = 'gabriel.chabert.s@gmail.com';
+
+            // Utilisation de l'API moderne Clipboard
+            navigator.clipboard.writeText(email).then(() => {
+                btn.textContent = 'E-mail copié !';
+                
+                // Retour à l'état initial après 2 secondes
+                setTimeout(() => {
+                    btn.textContent = 'Me contacter';
+                }, 2000);
+            }).catch(err => {
+                console.error('Erreur lors de la copie : ', err);
+            });
+        });
     </script>
+
+    
 
 </body>
 </html>
