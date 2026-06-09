@@ -6,6 +6,14 @@
     <title>Page Introuvable | Gabriel Chabert</title>
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
     <link rel="stylesheet" href="style.css">
+    <script>
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark-mode');
+        } else {
+            document.documentElement.classList.remove('dark-mode');
+        }
+    </script>
+    <script src="assets/script.js" defer></script>
 </head>
 <body>
     <div class="page-transition">
@@ -23,31 +31,6 @@
         <a href="index.html" class="btn-primary">Retour à l'accueil</a>
     </main>
 
-    <script>
-        window.addEventListener('pageshow', function() {
-            const transition = document.querySelector('.page-transition');
-            if (transition) {
-                setTimeout(() => {
-                    transition.classList.add('is-hidden');
-                }, 50);
-            }
-        });
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const btn = document.querySelector('.btn-primary');
-            if (btn) {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const targetUrl = this.href;
-                    const transition = document.querySelector('.page-transition');
-                    transition.classList.remove('is-hidden');
-                    
-                    setTimeout(() => {
-                        window.location.href = targetUrl;
-                    }, 600);
-                });
-            }
-        });
-    </script>
 </body>
 </html>

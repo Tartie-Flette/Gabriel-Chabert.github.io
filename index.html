@@ -8,10 +8,18 @@
 
     <meta property="og:title" content="Gabriel Chabert | Ingénieur Systèmes Embarqués & Robotique">
     <meta property="og:description" content="De la modélisation de la dynamique d'un véhicule à l'intégration ROS 2. Découvrez mon portfolio technique et mes projets en mécatronique.">
-    <meta property="og:image" content="https://tartie-flette.github.io/Gabriel-Chabert.github.io/assets/og-image.PNG">
+    <meta property="og:image" content="https://tartie-flette.github.io/Gabriel-Chabert.github.io/assets/og-image.jpg">
     <meta property="og:url" content="https://tartie-flette.github.io/Gabriel-Chabert.github.io/">
     <meta property="og:type" content="website">
     <link rel="stylesheet" href="style.css">
+    <script>
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark-mode');
+        } else {
+            document.documentElement.classList.remove('dark-mode');
+        }
+    </script>
+    <script src="assets/script.js" defer></script>
 
     <script type="application/ld+json">
         {
@@ -51,11 +59,14 @@
     <nav class="navbar">
         <div class="nav-content">
             <a href="index.html" class="logo" style="text-decoration: none;">G. Chabert</a>
-            <ul class="nav-links">
-                <li><a href="index.html" class="active">Parcours</a></li>
-                <li><a href="projets.html">Projets</a></li>
-                <li><a href="resume.html">Resume</a></li>
-            </ul>
+            <div class="nav-right">
+                <ul class="nav-links">
+                    <li><a href="index.html" class="active">Parcours</a></li>
+                    <li><a href="projets.html">Projets</a></li>
+                    <li><a href="resume.html">Resume</a></li>
+                </ul>
+                <button id="theme-toggle" class="theme-toggle-btn"></button>
+            </div>
         </div>
     </nav>
 
@@ -79,6 +90,18 @@
             
             <div class="skills-grid">
                 <div class="skill-card">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="skill-card-icon">
+                        <rect x="2" y="2" width="20" height="20" rx="2" ry="2"></rect>
+                        <rect x="6" y="6" width="12" height="12" rx="2" ry="2"></rect>
+                        <line x1="9" y1="1" x2="9" y2="2"></line>
+                        <line x1="15" y1="1" x2="15" y2="2"></line>
+                        <line x1="9" y1="22" x2="9" y2="23"></line>
+                        <line x1="15" y1="22" x2="15" y2="23"></line>
+                        <line x1="22" y1="9" x2="23" y2="9"></line>
+                        <line x1="22" y1="15" x2="23" y2="15"></line>
+                        <line x1="1" y1="9" x2="2" y2="9"></line>
+                        <line x1="1" y1="15" x2="2" y2="15"></line>
+                    </svg>
                     <h4>Architectures Embarquées</h4>
                     <span class="skill-tag">C / C++</span>
                     <span class="skill-tag">Microcontrôleurs</span>
@@ -86,6 +109,14 @@
                 </div>
                 
                 <div class="skill-card">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="skill-card-icon">
+                        <circle cx="12" cy="5" r="3"></circle>
+                        <path d="M6.5 8a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2"></path>
+                        <line x1="8" y1="14" x2="8" y2="18"></line>
+                        <line x1="16" y1="14" x2="16" y2="18"></line>
+                        <line x1="9" y1="8" x2="9" y2="5"></line>
+                        <line x1="15" y1="8" x2="15" y2="5"></line>
+                    </svg>
                     <h4>Contrôle & Robotique</h4>
                     <span class="skill-tag">ROS 2</span>
                     <span class="skill-tag">Python</span>
@@ -93,6 +124,10 @@
                 </div>
 
                 <div class="skill-card">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="skill-card-icon">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        <polyline points="8 11 11 14 17 8"></polyline>
+                    </svg>
                     <h4>Ingénierie & Sûreté</h4>
                     <span class="skill-tag">AMDEC / RCA</span>
                     <span class="skill-tag">SolidWorks</span>
@@ -118,48 +153,7 @@
     </footer>
 
     <script>
-        // 1. Gère l'arrivée sur la page (Chargement initial, rechargement ou bouton "Retour")
-        window.addEventListener('pageshow', function(event) {
-            const transition = document.querySelector('.page-transition');
-            if (transition) {
-                // Petit délai pour laisser le navigateur dessiner la page avant d'ouvrir le voile
-                setTimeout(() => {
-                    transition.classList.add('is-hidden'); // Le logo passe de 1.1 à 0.8
-                }, 50);
-            }
-        });
-
-        // 2. Gère le départ de la page (Clic sur TOUS les liens de navigation)
-        document.addEventListener('DOMContentLoaded', () => {
-            // On cible absolument tous les liens <a> de la page pour éviter les oublis (logo inclus)
-            const links = document.querySelectorAll('a');
-            
-            links.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    const href = this.getAttribute('href');
-                    const targetUrl = this.href;
-                    
-                    // SÉCURITÉ : On ignore le script si le lien est externe, si c'est une ancre (#) ou un mailto
-                    if (this.target === '_blank' || !href || href.startsWith('#') || href.startsWith('mailto:')) {
-                        return; 
-                    }
-
-                    // On stoppe le comportement par défaut pour lancer notre animation
-                    e.preventDefault();
-                    const transition = document.querySelector('.page-transition');
-                    
-                    // On fait réapparaître le voile noir (le logo reprend sa taille max de 1.1)
-                    transition.classList.remove('is-hidden');
-                    
-                    // On attend la fin exacte de la transition CSS (600ms) avant de changer/recharger la page
-                    setTimeout(() => {
-                        window.location.href = targetUrl;
-                    }, 600);
-                });
-            });
-        });
-
-        // 3. Gère le clic sur le bouton "Me contacter" pour copier l'e-mail dans le presse-papiers
+        // Gère le clic sur le bouton "Me contacter" pour copier l'e-mail dans le presse-papiers
         document.getElementById('email-btn').addEventListener('click', function() {
             const btn = this;
             const email = 'gabriel.chabert.s@gmail.com';

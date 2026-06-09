@@ -8,10 +8,18 @@
 
     <meta property="og:title" content="Gabriel Chabert | Ingénieur Systèmes Embarqués & Robotique">
     <meta property="og:description" content="De la modélisation de la dynamique d'un véhicule à l'intégration ROS 2. Découvrez mon portfolio technique et mes projets en mécatronique.">
-    <meta property="og:image" content="https://tartie-flette.github.io/Gabriel-Chabert.github.io/assets/og-image.PNG">
+    <meta property="og:image" content="https://tartie-flette.github.io/Gabriel-Chabert.github.io/assets/og-image.jpg">
     <meta property="og:url" content="https://tartie-flette.github.io/Gabriel-Chabert.github.io/">
     <meta property="og:type" content="website">
     <link rel="stylesheet" href="style.css">
+    <script>
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark-mode');
+        } else {
+            document.documentElement.classList.remove('dark-mode');
+        }
+    </script>
+    <script src="assets/script.js" defer></script>
 
     <script type="application/ld+json">
         {
@@ -52,11 +60,14 @@
     <nav class="navbar">
         <div class="nav-content">
             <a href="index.html" class="logo" style="text-decoration: none;">G. Chabert</a>
-            <ul class="nav-links">
-                <li><a href="index.html">Parcours</a></li>
-                <li><a href="projets.html">Projets</a></li>
-                <li><a href="resume.html" class="active">Resume</a></li>
-            </ul>
+            <div class="nav-right">
+                <ul class="nav-links">
+                    <li><a href="index.html">Parcours</a></li>
+                    <li><a href="projets.html">Projets</a></li>
+                    <li><a href="resume.html" class="active">Resume</a></li>
+                </ul>
+                <button id="theme-toggle" class="theme-toggle-btn"></button>
+            </div>
         </div>
     </nav>
 
@@ -128,48 +139,7 @@
         </div>
     </footer>
 
-    <script>
-        // 1. Gère l'arrivée sur la page (Chargement initial, rechargement ou bouton "Retour")
-        window.addEventListener('pageshow', function(event) {
-            const transition = document.querySelector('.page-transition');
-            if (transition) {
-                // Petit délai pour laisser le navigateur dessiner la page avant d'ouvrir le voile
-                setTimeout(() => {
-                    transition.classList.add('is-hidden'); // Le logo passe de 1.1 à 0.8
-                }, 50);
-            }
-        });
 
-        // 2. Gère le départ de la page (Clic sur TOUS les liens de navigation)
-        document.addEventListener('DOMContentLoaded', () => {
-            // On cible absolument tous les liens <a> de la page pour éviter les oublis (logo inclus)
-            const links = document.querySelectorAll('a');
-            
-            links.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    const href = this.getAttribute('href');
-                    const targetUrl = this.href;
-                    
-                    // SÉCURITÉ : On ignore le script si le lien est externe, si c'est une ancre (#) ou un mailto
-                    if (this.target === '_blank' || !href || href.startsWith('#') || href.startsWith('mailto:')) {
-                        return; 
-                    }
-
-                    // On stoppe le comportement par défaut pour lancer notre animation
-                    e.preventDefault();
-                    const transition = document.querySelector('.page-transition');
-                    
-                    // On fait réapparaître le voile noir (le logo reprend sa taille max de 1.1)
-                    transition.classList.remove('is-hidden');
-                    
-                    // On attend la fin exacte de la transition CSS (600ms) avant de changer/recharger la page
-                    setTimeout(() => {
-                        window.location.href = targetUrl;
-                    }, 600);
-                });
-            });
-        });
-    </script>
 
 </body>
 </html>
