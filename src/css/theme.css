@@ -1,0 +1,31 @@
+/**
+ * theme.css - Surcharges de variables pour le Mode Sombre
+ */
+
+:root.dark-mode {
+    /* --- COULEURS (THEME SOMBRE) --- */
+    --bg-color: #0C0C0E;
+    --bg-alt: #121216;
+    --text-main: #F5F5F7;
+    --text-light: #9B9BA3;
+    --border-color: #1F1F26;
+    --card-bg: #141418;
+    --card-hover-bg: #1B1B22;
+    
+    /* Accents */
+    --accent-color: #FF5A36;       /* Terracotta plus lumineux pour contraste */
+    --accent-warm: #F48C72;
+    --accent-gold: #FFC099;
+    --accent-glow: rgba(255, 90, 54, 0.25);
+    
+    /* Canaux RGB pour mélanges (opacité) */
+    --accent-rgb: 255, 90, 54;
+    --bg-rgb: 12, 12, 14;
+    --text-rgb: 245, 245, 247;
+
+    /* --- EFFETS & SHADOWS --- */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 20px 45px rgba(0, 0, 0, 0.5);
+    --nav-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
+}

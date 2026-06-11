@@ -1,0 +1,620 @@
+/**
+ * components.css - Reusable Interface Components & Bento Grid
+ */
+
+/* --- NAVBAR GLASSMORPHISM --- */
+.navbar {
+    background-color: rgba(var(--bg-rgb), 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 16px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--nav-shadow);
+    border-bottom: var(--border-width) solid var(--border-color);
+    transition: background-color var(--transition-normal), border-color var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.nav-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: var(--accent-color);
+    letter-spacing: -0.5px;
+    transition: color var(--transition-fast);
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 28px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--text-main);
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color var(--transition-fast);
+}
+
+.nav-links a:hover, 
+.nav-links a.active {
+    color: var(--accent-color);
+}
+
+/* Trace de soulignement dynamique au hover */
+.nav-links a::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--accent-color);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease;
+}
+
+.nav-links a:hover::after,
+.nav-links a.active::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+/* --- BOUTON DE THEME --- */
+.theme-toggle-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-main);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 50%;
+    border: var(--border-width) solid var(--border-color);
+    transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.theme-toggle-btn:hover {
+    background-color: var(--accent-glow);
+    color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.theme-icon {
+    width: 18px;
+    height: 18px;
+}
+
+/* --- BOUTONS --- */
+.btn-primary {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--accent-color), var(--accent-warm));
+    color: #FFFFFF;
+    padding: 12px 28px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 15px var(--accent-glow);
+    transition: transform var(--transition-bounce), box-shadow var(--transition-normal);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px var(--accent-glow);
+}
+
+.btn-secondary {
+    display: inline-block;
+    background: transparent;
+    color: var(--accent-color);
+    padding: 8px 20px;
+    border: 2px solid var(--accent-color);
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform var(--transition-bounce), background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.btn-secondary:hover {
+    background-color: var(--accent-color);
+    color: #FFFFFF;
+    transform: translateY(-2px);
+}
+
+.btn-link {
+    text-decoration: none;
+    color: var(--accent-color);
+    font-weight: 600;
+    transition: color var(--transition-fast);
+}
+
+.btn-link:hover {
+    color: var(--accent-warm);
+}
+
+/* --- PROJECTS SHOWCASE (PREMIUM CASE STUDY LAYOUT) --- */
+.projects-showcase {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    margin-bottom: 60px;
+}
+
+.project-item {
+    background: var(--card-bg);
+    border: var(--border-width) solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    padding: 40px;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition-bounce), 
+                box-shadow var(--transition-bounce), 
+                border-color var(--transition-normal), 
+                background-color var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+}
+
+.project-item:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--accent-color);
+}
+
+.project-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 0.7fr;
+    gap: 48px;
+}
+
+.project-main {
+    display: flex;
+    flex-direction: column;
+}
+
+.project-main h3 {
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+    color: var(--text-main);
+}
+
+/* Style de la structure STAR */
+.star-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.star-block {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.star-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: var(--accent-glow);
+    color: var(--accent-color);
+    font-weight: 700;
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    flex-shrink: 0;
+    border: var(--border-width) solid var(--accent-color);
+    margin-top: 2px;
+}
+
+.star-text {
+    color: var(--text-light);
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.star-text strong {
+    color: var(--text-main);
+}
+
+/* Mise en évidence du Résultat */
+.star-block.result-block .star-badge {
+    background-color: var(--accent-color);
+    color: #FFFFFF;
+}
+
+.star-block.result-block .star-text {
+    font-weight: 500;
+    color: var(--text-main);
+}
+
+/* Sidebar du projet */
+.project-sidebar {
+    display: flex;
+    flex-direction: column;
+    border-left: var(--border-width) solid var(--border-color);
+    padding-left: 40px;
+}
+
+.sidebar-section {
+    margin-bottom: 24px;
+}
+
+.sidebar-section h4 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-light);
+    margin-bottom: 12px;
+}
+
+.project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.skill-tag {
+    display: inline-block;
+    background-color: var(--bg-alt);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--accent-color);
+    border: var(--border-width) solid rgba(var(--accent-rgb), 0.15);
+    transition: background var(--transition-normal), border-color var(--transition-normal);
+}
+
+/* Statistiques spécifiques au projet */
+.project-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.project-stat-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    background: var(--bg-alt);
+    border: var(--border-width) solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    transition: background var(--transition-normal), border-color var(--transition-normal);
+}
+
+.project-stat-val {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--accent-color);
+    font-family: var(--font-heading);
+    min-width: 65px;
+}
+
+.project-stat-lbl {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    line-height: 1.2;
+}
+
+/* Accordion de code dans la sidebar ou le bas */
+.project-details {
+    margin-top: 15px;
+    padding: 16px;
+    background-color: var(--bg-alt);
+    border-radius: var(--border-radius-sm);
+    border: var(--border-width) solid var(--border-color);
+    transition: background-color var(--transition-normal), border-color var(--transition-normal);
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.project-details summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--accent-color);
+    outline: none;
+}
+
+.code-snippet {
+    font-family: monospace;
+    font-size: 0.85rem;
+    margin-top: 12px;
+    color: var(--text-light);
+    background: rgba(var(--text-rgb), 0.05);
+    padding: 10px;
+    border-radius: 4px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+
+.project-actions {
+    margin-top: auto;
+}
+
+/* --- CARDS DE COMPÉTENCES (ACCUEIL) --- */
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+    margin-top: 30px;
+}
+
+.skill-card {
+    background: var(--card-bg);
+    padding: 30px 24px;
+    border-radius: var(--border-radius-md);
+    border: var(--border-width) solid var(--border-color);
+    border-bottom: 4px solid var(--accent-warm);
+    transition: transform var(--transition-bounce), 
+                box-shadow var(--transition-bounce), 
+                border-color var(--transition-normal), 
+                background-color var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+}
+
+.skill-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--accent-color);
+}
+
+.skill-card-icon {
+    width: 36px;
+    height: 36px;
+    color: var(--accent-color);
+    margin-bottom: 20px;
+    transition: transform var(--transition-bounce);
+}
+
+.skill-card:hover .skill-card-icon {
+    transform: scale(1.2) rotate(6deg);
+}
+
+.skill-card h4 {
+    font-size: 1.25rem;
+    margin-bottom: 16px;
+    color: var(--text-main);
+}
+
+/* --- TIMELINE (CV) --- */
+.timeline {
+    border-left: 3px solid var(--accent-warm);
+    padding-left: 32px;
+    margin-left: 16px;
+    margin-top: 40px;
+    margin-bottom: 60px;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 44px;
+}
+
+.timeline-item::before {
+    content: "";
+    position: absolute;
+    left: -42px;
+    top: 6px;
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    background-color: var(--card-bg);
+    border: 4px solid var(--accent-color);
+    transition: transform var(--transition-bounce), background-color var(--transition-normal);
+    z-index: 2;
+}
+
+.timeline-item:hover::before {
+    background-color: var(--accent-color);
+    transform: scale(1.3);
+}
+
+.timeline-date {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--accent-color);
+    margin-bottom: 6px;
+    font-size: 0.95rem;
+}
+
+.timeline-title {
+    font-size: 1.3rem;
+    color: var(--text-main);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.timeline-icon {
+    width: 20px;
+    height: 20px;
+    color: var(--accent-color);
+    flex-shrink: 0;
+}
+
+.timeline-subtitle {
+    font-size: 1rem;
+    color: var(--text-light);
+    margin-bottom: 12px;
+    font-style: italic;
+}
+
+/* --- MODAL (SIMULATION ABS) --- */
+.modal-overlay {
+    display: none; 
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(12, 12, 14, 0.85);
+    z-index: 10000; 
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity var(--transition-normal) ease;
+}
+
+.modal-overlay.active {
+    display: flex;
+    opacity: 1;
+}
+
+.modal-content {
+    background: var(--bg-color);
+    padding: 32px;
+    border-radius: var(--border-radius-md);
+    max-width: 800px;
+    width: 90%;
+    position: relative;
+    transform: scale(0.92);
+    border: var(--border-width) solid var(--border-color);
+    transition: transform var(--transition-bounce), background var(--transition-normal), border-color var(--transition-normal);
+    box-shadow: var(--shadow-lg);
+}
+
+.modal-overlay.active .modal-content {
+    transform: scale(1);
+}
+
+.close-modal {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    font-size: 1.8rem;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: var(--text-light);
+    transition: color var(--transition-fast);
+}
+
+.close-modal:hover {
+    color: var(--accent-color);
+}
+
+.modal-title {
+    margin-bottom: 12px;
+    font-size: 1.3rem;
+    color: var(--accent-color);
+}
+
+.modal-image {
+    width: 100%;
+    border-radius: var(--border-radius-sm);
+    border: var(--border-width) solid var(--border-color);
+    transition: border-color var(--transition-normal);
+}
+
+.modal-caption {
+    font-size: 0.95rem;
+    color: var(--text-light);
+    margin-top: 16px;
+    font-style: italic;
+}
+
+/* --- FOOTER & CTA --- */
+.cta-section {
+    background-color: var(--card-bg);
+    padding: 60px 24px;
+    text-align: center;
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-sm);
+    margin: 80px auto 40px auto;
+    border: var(--border-width) solid var(--border-color);
+    transition: background-color var(--transition-normal), border-color var(--transition-normal);
+}
+
+.cta-content h3 {
+    font-size: 2rem;
+    color: var(--text-main);
+    margin-bottom: 16px;
+}
+
+.cta-content p {
+    color: var(--text-light);
+    margin-bottom: 30px;
+    font-size: 1.1rem;
+}
+
+footer {
+    background-color: var(--card-bg);
+    padding: 40px 0;
+    margin-top: 80px;
+    border-top: var(--border-width) solid var(--border-color);
+    transition: background-color var(--transition-normal), border-color var(--transition-normal);
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-light);
+    transition: color var(--transition-normal);
+}
+
+/* --- RESPONSIVE GENERAL --- */
+@media screen and (max-width: 900px) {
+    .bento-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .bento-span-2 {
+        grid-column: span 1;
+    }
+
+    .nav-content {
+        flex-direction: column;
+        gap: 16px;
+    }
+    
+    .nav-right {
+        flex-direction: column;
+        gap: 16px;
+        width: 100%;
+    }
+    
+    .nav-links {
+        gap: 20px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .footer-content {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+    }
+}

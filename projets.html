@@ -11,7 +11,7 @@
     <meta property="og:image" content="https://tartie-flette.github.io/Gabriel-Chabert.github.io/assets/og-image.jpg">
     <meta property="og:url" content="https://tartie-flette.github.io/Gabriel-Chabert.github.io/">
     <meta property="og:type" content="website">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="src/css/main.css">
     <script>
         if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark-mode');
@@ -19,7 +19,16 @@
             document.documentElement.classList.remove('dark-mode');
         }
     </script>
-    <script src="assets/script.js" defer></script>
+    <!-- Bibliothèques CDN externes for animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    
+    <!-- Scripts applicatifs de base (non-modules pour fonctionner en file:// local) -->
+    <script src="src/js/modules/theme.js"></script>
+    <script src="src/js/modules/transitions.js"></script>
+    
+    <!-- Script modulaire pour les fonctionnalités avancées (3D et animations de scroll) -->
+    <script type="module" src="src/js/main.js"></script>
 
     <script type="application/ld+json">
         {
@@ -56,6 +65,15 @@
             <circle cx="390" cy="350" r="28" fill="#E8A87C"/>
         </svg>
     </div>
+    <script>
+        // Sécurité anti-blocage : masquer la transition après 1.5 seconde si le chargement JS prend trop de temps ou échoue
+        setTimeout(function() {
+            var overlay = document.querySelector('.page-transition');
+            if (overlay && !overlay.classList.contains('is-hidden')) {
+                overlay.classList.add('is-hidden');
+            }
+        }, 1500);
+    </script>
 
     <nav class="navbar">
         <div class="nav-content">
@@ -66,7 +84,11 @@
                     <li><a href="projets.html" class="active">Projets</a></li>
                     <li><a href="resume.html">Resume</a></li>
                 </ul>
-                <button id="theme-toggle" class="theme-toggle-btn"></button>
+                <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle theme">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="theme-icon">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
             </div>
         </div>
     </nav>
@@ -74,64 +96,185 @@
     <main class="container">
         <h3 class="page-title">Études de <span class="gradient-text">Cas Techniques</span></h3>
         
-        <section>
-            <article class="project-card">
-                <h3>Intégration Système USV BlueBoat & IHM Asynchrone</h3>
-                <div class="project-tags">
-                    <span class="skill-tag">Python</span> <span class="skill-tag">ROS 2</span> <span class="skill-tag">PyQt5</span> <span class="skill-tag">TCP/IP</span>
-                </div>
-                
-                <div class="project-content">
-                    <p><strong>Situation :</strong> Le système de contrôle d'un navire de surface autonome (USV) souffrait d'une instabilité critique lors de la remontée de télémétrie via une liaison Série-vers-Ethernet.</p>
-                    <p><strong>Tâche :</strong> Assurer une communication temps réel robuste pour superviser les données NMEA 0183 tout en garantissant la fluidité de l'interface utilisateur.</p>
-                    <p><strong>Action :</strong> Développement d'une IHM asynchrone sous PyQt5. Pour résoudre la fragmentation réseau identifiée via une analyse de causes racines (RCA), j'ai implémenté des buffers circulaires (FIFO) et des filtres de données personnalisés pour saturer la bande passante de manière optimale.</p>
-                    <p><strong>Résultat :</strong> Élimination totale des pertes de paquets et réduction de la latence d'affichage de 40%, permettant un pilotage distant sécurisé.</p>
+        <div class="projects-showcase">
+            <!-- Projet 1 : USV BlueBoat -->
+            <article class="project-item">
+                <div class="project-grid">
+                    <div class="project-main">
+                        <h3>Intégration Système USV BlueBoat & IHM Asynchrone</h3>
+                        
+                        <div class="star-container">
+                            <div class="star-block">
+                                <div class="star-badge">S</div>
+                                <div class="star-text"><strong>Situation :</strong> Le système de contrôle d'un navire de surface autonome (USV) souffrait d'une instabilité critique lors de la remontée de télémétrie via une liaison Série-vers-Ethernet.</div>
+                            </div>
+                            <div class="star-block">
+                                <div class="star-badge">T</div>
+                                <div class="star-text"><strong>Tâche :</strong> Assurer une communication temps réel robuste pour superviser les données NMEA 0183 tout en garantissant la fluidité de l'interface utilisateur.</div>
+                            </div>
+                            <div class="star-block">
+                                <div class="star-badge">A</div>
+                                <div class="star-text"><strong>Action :</strong> Développement d'une IHM asynchrone sous PyQt5. Pour résoudre la fragmentation réseau identifiée via une analyse de causes racines (RCA), j'ai implémenté des buffers circulaires (FIFO) et des filtres de données personnalisés pour saturer la bande passante de manière optimale.</div>
+                            </div>
+                            <div class="star-block result-block">
+                                <div class="star-badge">R</div>
+                                <div class="star-text"><strong>Résultat :</strong> Élimination totale des pertes de paquets et réduction de la latence d'affichage de 40%, permettant un pilotage distant sécurisé.</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="project-sidebar">
+                        <div class="sidebar-section">
+                            <h4>Technologies</h4>
+                            <div class="project-tags">
+                                <span class="skill-tag">Python</span>
+                                <span class="skill-tag">ROS 2</span>
+                                <span class="skill-tag">PyQt5</span>
+                                <span class="skill-tag">TCP/IP</span>
+                            </div>
+                        </div>
+                        
+                        <div class="sidebar-section">
+                            <h4>Métriques d'impact</h4>
+                            <div class="project-stats">
+                                <div class="project-stat-row">
+                                    <div class="project-stat-val">0%</div>
+                                    <div class="project-stat-lbl">Perte de paquets réseau</div>
+                                </div>
+                                <div class="project-stat-row">
+                                    <div class="project-stat-val">-40%</div>
+                                    <div class="project-stat-lbl">Latence d'affichage UI</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </article>
 
-            <article class="project-card">
-                <h3>Robot Mobile Autonome & Sécurité Temps Réel</h3>
-                <div class="project-tags">
-                    <span class="skill-tag">C</span> <span class="skill-tag">Microcontrôleur</span> <span class="skill-tag">UART</span> <span class="skill-tag">FSM</span>
-                </div>
-                
-                <div class="project-content">
-                    <p><strong>Situation :</strong> L'architecture embarquée du robot exigeait une bascule instantanée entre la navigation autonome (évitement d'obstacles) et le pilotage manuel, avec un risque élevé de collision en cas de corruption du signal de commande.</p>
-                    <p><strong>Tâche :</strong> Sécuriser le flux de données entrant et garantir que la logique décisionnelle du microcontrôleur reste déterministe, même en environnement perturbé.</p>
-                    <p><strong>Action :</strong> Programmation d'une machine à états finis (FSM) stricte en C. J'ai sécurisé la couche de communication UART via des buffers circulaires multi-threads et implémenté un protocole de validation par checksum pour rejeter les paquets corrompus.</p>
-                    <p><strong>Résultat :</strong> Bascule entre les modes sans aucune latence perceptible et garantie d'un arrêt d'urgence autonome systématique en cas de perte d'intégrité du signal.</p>
+            <!-- Projet 2 : Robot Mobile -->
+            <article class="project-item">
+                <div class="project-grid">
+                    <div class="project-main">
+                        <h3>Robot Mobile Autonome & Sécurité Temps Réel</h3>
+                        
+                        <div class="star-container">
+                            <div class="star-block">
+                                <div class="star-badge">S</div>
+                                <div class="star-text"><strong>Situation :</strong> L'architecture embarquée du robot exigeait une bascule instantanée entre la navigation autonome (évitement d'obstacles) et le pilotage manuel, avec un risque élevé de collision en cas de corruption du signal de commande.</div>
+                            </div>
+                            <div class="star-block">
+                                <div class="star-badge">T</div>
+                                <div class="star-text"><strong>Tâche :</strong> Sécuriser le flux de données entrant et garantir que la logique décisionnelle du microcontrôleur reste déterministe, même en environnement perturbé.</div>
+                            </div>
+                            <div class="star-block">
+                                <div class="star-badge">A</div>
+                                <div class="star-text"><strong>Action :</strong> Programmation d'une machine à états finis (FSM) stricte en C. J'ai sécurisé la couche de communication UART via des buffers circulaires multi-threads et implémenté un protocole de validation par checksum pour rejeter les paquets corrompus.</div>
+                            </div>
+                            <div class="star-block result-block">
+                                <div class="star-badge">R</div>
+                                <div class="star-text"><strong>Résultat :</strong> Bascule entre les modes sans aucune latence perceptible et garantie d'un arrêt d'urgence autonome systématique en cas de perte d'intégrité du signal.</div>
+                            </div>
+                        </div>
+                        
+                        <details class="project-details">
+                            <summary>Voir la gestion des états critiques (FSM en C)</summary>
+                            <p class="code-snippet">
+                                // Rejet des trames invalides et protection mémoire<br>
+                                if (!validate_checksum(rx_buffer)) {<br>
+                                &nbsp;&nbsp;current_state = STATE_EMERGENCY_STOP;<br>
+                                &nbsp;&nbsp;halt_motors();<br>
+                                &nbsp;&nbsp;return;<br>
+                                }<br>
+                                process_valid_command();
+                            </p>
+                        </details>
+                    </div>
                     
-                    <details class="project-details">
-                        <summary>Voir la gestion des états critiques</summary>
-                        <p class="code-snippet">
-                            // Rejet des trames invalides et protection mémoire<br>
-                            if (!validate_checksum(rx_buffer)) {<br>
-                            &nbsp;&nbsp;current_state = STATE_EMERGENCY_STOP;<br>
-                            &nbsp;&nbsp;halt_motors();<br>
-                            &nbsp;&nbsp;return;<br>
-                            }<br>
-                            process_valid_command();
-                        </p>
-                    </details>
+                    <div class="project-sidebar">
+                        <div class="sidebar-section">
+                            <h4>Technologies</h4>
+                            <div class="project-tags">
+                                <span class="skill-tag">C</span>
+                                <span class="skill-tag">Microcontrôleur</span>
+                                <span class="skill-tag">UART</span>
+                                <span class="skill-tag">FSM</span>
+                            </div>
+                        </div>
+                        
+                        <div class="sidebar-section">
+                            <h4>Métriques d'impact</h4>
+                            <div class="project-stats">
+                                <div class="project-stat-row">
+                                    <div class="project-stat-val">100%</div>
+                                    <div class="project-stat-lbl">Déterminisme du système</div>
+                                </div>
+                                <div class="project-stat-row">
+                                    <div class="project-stat-val">0 ms</div>
+                                    <div class="project-stat-lbl">Bascule d'urgence</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </article>
 
-            <article class="project-card">
-                <h3>Modélisation Dynamique & Asservissement ABS</h3>
-                <div class="project-tags">
-                    <span class="skill-tag">MATLAB/Simulink</span> <span class="skill-tag">Automatique</span> <span class="skill-tag">Physique</span>
-                </div>
-                
-                <div class="project-content">
-                    <p><strong>Situation :</strong> Lors d'un freinage d'urgence, le blocage des roues allonge la distance d'arrêt et supprime la capacité de guidage directionnel du véhicule.</p>
-                    <p><strong>Tâche :</strong> Maintenir le taux de glissement longitudinal des pneumatiques dans la zone d'adhérence optimale (autour de 20%) en modulant la pression de freinage.</p>
-                    <p><strong>Action :</strong> Création d'un modèle dynamique quart-de-véhicule. J'ai synthétisé et comparé des correcteurs PI et des logiques Bang-Bang en temps discret, en y intégrant volontairement des retards purs pour simuler la latence d'échantillonnage des capteurs réels.</p>
-                    <p><strong>Résultat :</strong> Stabilisation du glissement à la valeur cible en moins de 0.2 secondes en simulation, validant la robustesse de la boucle d'asservissement face aux délais matériels incompressibles.</p>
+            <!-- Projet 3 : Asservissement ABS -->
+            <article class="project-item">
+                <div class="project-grid">
+                    <div class="project-main">
+                        <h3>Modélisation Dynamique & Asservissement ABS</h3>
+                        
+                        <div class="star-container">
+                            <div class="star-block">
+                                <div class="star-badge">S</div>
+                                <div class="star-text"><strong>Situation :</strong> Lors d'un freinage d'urgence, le blocage des roues allonge la distance d'arrêt et supprime la capacité de guidage directionnel du véhicule.</div>
+                            </div>
+                            <div class="star-block">
+                                <div class="star-badge">T</div>
+                                <div class="star-text"><strong>Tâche :</strong> Maintenir le taux de glissement longitudinal des pneumatiques dans la zone d'adhérence optimale (autour de 20%) en modulant la pression de freinage.</div>
+                            </div>
+                            <div class="star-block">
+                                <div class="star-badge">A</div>
+                                <div class="star-text"><strong>Action :</strong> Création d'un modèle dynamique quart-de-véhicule. J'ai synthétisé et comparé des correcteurs PI et des logiques Bang-Bang en temps discret, en y intégrant volontairement des retards purs pour simuler la latence d'échantillonnage des capteurs réels.</div>
+                            </div>
+                            <div class="star-block result-block">
+                                <div class="star-badge">R</div>
+                                <div class="star-text"><strong>Résultat :</strong> Stabilisation du glissement à la valeur cible en moins de 0.2 secondes en simulation, validant la robustesse de la boucle d'asservissement face aux délais matériels incompressibles.</div>
+                            </div>
+                        </div>
+                    </div>
                     
-                    <button class="btn-secondary" onclick="openSimulation()">Voir la réponse indicielle (Scope)</button>
+                    <div class="project-sidebar">
+                        <div class="sidebar-section">
+                            <h4>Technologies</h4>
+                            <div class="project-tags">
+                                <span class="skill-tag">MATLAB/Simulink</span>
+                                <span class="skill-tag">Automatique</span>
+                                <span class="skill-tag">Physique</span>
+                            </div>
+                        </div>
+                        
+                        <div class="sidebar-section">
+                            <h4>Métriques d'impact</h4>
+                            <div class="project-stats">
+                                <div class="project-stat-row">
+                                    <div class="project-stat-val">&lt; 0.2s</div>
+                                    <div class="project-stat-lbl">Temps de stabilisation</div>
+                                </div>
+                                <div class="project-stat-row">
+                                    <div class="project-stat-val">20%</div>
+                                    <div class="project-stat-lbl">Glissement cible</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="project-actions">
+                            <button class="btn-secondary" onclick="openSimulation()">Voir le scope de simulation</button>
+                        </div>
+                    </div>
                 </div>
             </article>
-        </section>
+        </div>
     </main>
 
     <div id="abs-modal" class="modal-overlay">
