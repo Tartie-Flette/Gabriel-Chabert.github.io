@@ -11,6 +11,39 @@
     <meta property="og:image" content="https://tartie-flette.github.io/Gabriel-Chabert.github.io/assets/og-image.jpg">
     <meta property="og:url" content="https://tartie-flette.github.io/Gabriel-Chabert.github.io/">
     <meta property="og:type" content="website">
+    <!-- Style critique pour éviter le flash de contenu non stylisé (FOUC) lors des transitions -->
+    <style>
+        .page-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: #111111;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 1; 
+            pointer-events: auto;
+            transition: opacity 0.6s cubic-bezier(0.8, 0, 0.2, 1);
+        }
+        .page-transition.is-hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .page-transition svg {
+            width: 90px;
+            height: 90px;
+            transform: scale(1.1);
+            opacity: 1;
+            transition: transform 0.6s cubic-bezier(0.8, 0, 0.2, 1), opacity 0.6s ease;
+        }
+        .page-transition.is-hidden svg {
+            transform: scale(0.8);
+            opacity: 0;
+        }
+    </style>
     <link rel="stylesheet" href="src/css/main.css">
     <script>
         if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -27,6 +60,7 @@
     <!-- Scripts applicatifs de base (non-modules pour fonctionner en file:// local) -->
     <script src="src/js/modules/theme.js"></script>
     <script src="src/js/modules/transitions.js"></script>
+    <script src="src/js/modules/filtering.js"></script>
     
     <!-- Script modulaire pour les fonctionnalités avancées (3D et animations de scroll) -->
     <script type="module" src="src/js/main.js"></script>
@@ -66,10 +100,21 @@
         </svg>
     </div>
     <script>
-        // Sécurité anti-blocage : masquer la transition après 1.5 seconde si le chargement JS prend trop de temps ou échoue
-        setTimeout(function() {
+        // Masquer la transition après un bref délai pour assurer un fondu d'entrée fluide dès le premier rendu
+        (function() {
             var overlay = document.querySelector('.page-transition');
-            if (overlay && !overlay.classList.contains('is-hidden')) {
+            if (overlay) {
+                window.transitionTimeout1 = setTimeout(function() {
+                    if (!window.isTransitioning) {
+                        overlay.classList.add('is-hidden');
+                    }
+                }, 50);
+            }
+        })();
+        // Sécurité anti-blocage : masquer la transition après 1.5 seconde en cas de lenteur extrême
+        window.transitionTimeout2 = setTimeout(function() {
+            var overlay = document.querySelector('.page-transition');
+            if (overlay && !overlay.classList.contains('is-hidden') && !window.isTransitioning) {
                 overlay.classList.add('is-hidden');
             }
         }, 1500);
@@ -106,7 +151,27 @@
                 </div>
                 <div class="hero-visual">
                     <div id="robot-canvas-container"></div>
-                    <div class="hud-overlay">SYSTEM: ACTIVE // 3D_ARM_V1.0</div>
+                    
+                    <!-- Panneau de contrôle interactif pour le bras 3D -->
+                    <div class="robot-controls-panel">
+                        <button type="button" id="btn-robot-mode" class="btn-mode-toggle" title="Basculer entre contrôle Manuel (Sliders) et Automatique (Souris)">
+                            <span>Mode : Auto</span>
+                        </button>
+                        <div class="robot-sliders" style="display: none;">
+                            <div class="slider-group">
+                                <label for="slider-base">Base : <span id="val-base">0°</span></label>
+                                <input type="range" id="slider-base" min="-90" max="90" value="0">
+                            </div>
+                            <div class="slider-group">
+                                <label for="slider-shoulder">Épaule : <span id="val-shoulder">-11°</span></label>
+                                <input type="range" id="slider-shoulder" min="-45" max="30" value="-11">
+                            </div>
+                            <div class="slider-group">
+                                <label for="slider-elbow">Coude : <span id="val-elbow">28°</span></label>
+                                <input type="range" id="slider-elbow" min="-15" max="75" value="28">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

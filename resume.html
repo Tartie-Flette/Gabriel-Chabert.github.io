@@ -11,6 +11,39 @@
     <meta property="og:image" content="https://tartie-flette.github.io/Gabriel-Chabert.github.io/assets/og-image.jpg">
     <meta property="og:url" content="https://tartie-flette.github.io/Gabriel-Chabert.github.io/">
     <meta property="og:type" content="website">
+    <!-- Style critique pour éviter le flash de contenu non stylisé (FOUC) lors des transitions -->
+    <style>
+        .page-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: #111111;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 1; 
+            pointer-events: auto;
+            transition: opacity 0.6s cubic-bezier(0.8, 0, 0.2, 1);
+        }
+        .page-transition.is-hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .page-transition svg {
+            width: 90px;
+            height: 90px;
+            transform: scale(1.1);
+            opacity: 1;
+            transition: transform 0.6s cubic-bezier(0.8, 0, 0.2, 1), opacity 0.6s ease;
+        }
+        .page-transition.is-hidden svg {
+            transform: scale(0.8);
+            opacity: 0;
+        }
+    </style>
     <link rel="stylesheet" href="src/css/main.css">
     <script>
         if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -26,6 +59,7 @@
     <!-- Scripts applicatifs de base (non-modules pour fonctionner en file:// local) -->
     <script src="src/js/modules/theme.js"></script>
     <script src="src/js/modules/transitions.js"></script>
+    <script src="src/js/modules/filtering.js"></script>
     
     <!-- Script modulaire pour les fonctionnalités avancées (3D et animations de scroll) -->
     <script type="module" src="src/js/main.js"></script>
@@ -66,10 +100,21 @@
         </svg>
     </div>
     <script>
-        // Sécurité anti-blocage : masquer la transition après 1.5 seconde si le chargement JS prend trop de temps ou échoue
-        setTimeout(function() {
+        // Masquer la transition après un bref délai pour assurer un fondu d'entrée fluide dès le premier rendu
+        (function() {
             var overlay = document.querySelector('.page-transition');
-            if (overlay && !overlay.classList.contains('is-hidden')) {
+            if (overlay) {
+                window.transitionTimeout1 = setTimeout(function() {
+                    if (!window.isTransitioning) {
+                        overlay.classList.add('is-hidden');
+                    }
+                }, 50);
+            }
+        })();
+        // Sécurité anti-blocage : masquer la transition après 1.5 seconde en cas de lenteur extrême
+        window.transitionTimeout2 = setTimeout(function() {
+            var overlay = document.querySelector('.page-transition');
+            if (overlay && !overlay.classList.contains('is-hidden') && !window.isTransitioning) {
                 overlay.classList.add('is-hidden');
             }
         }, 1500);
@@ -108,9 +153,38 @@
                         <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
                     </svg>
                     Ingénieur Systèmes Électriques Automobiles
+                    <a href="https://www.circle-mobility.com/" target="_blank" class="timeline-link" title="Visiter le site de Circle Mobility" rel="noopener noreferrer">
+                        <svg class="link-external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                            <polyline points="15 3 21 3 21 9"></polyline>
+                            <line x1="10" y1="14" x2="21" y2="3"></line>
+                        </svg>
+                    </a>
                 </h4>
                 <div class="timeline-subtitle">Circle Mobility | Paris, France</div>
                 <p>Modélisation de systèmes, gestion de la nomenclature (BOM) et mise à jour des spécifications de câblage pour sécuriser la phase d'industrialisation. Intégration de composants sur véhicules de présérie et analyse des trames de bus CAN sur bancs d'essai.</p>
+                
+                <button type="button" class="btn-timeline-toggle">
+                    Détails
+                    <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </button>
+
+                <div class="timeline-details">
+                    <div class="timeline-details-inner">
+                        <h5>Missions clés & Livrables</h5>
+                        <ul>
+                            <li>Raccordement de faisceaux électriques basse tension sur prototypes physiques roulants de présérie.</li>
+                            <li>Vérification et analyse de l'intégrité des données du bus de communication CAN (Vector CANoe).</li>
+                            <li>Participation à la rédaction des protocoles d'essais d'intégration électrique système.</li>
+                        </ul>
+                        <div class="timeline-details-footer">
+                            <span class="skill-tag" style="pointer-events: none; cursor: default;">CAN</span>
+                            <span class="skill-tag" style="pointer-events: none; cursor: default;">Vector CANoe</span>
+                            <span class="skill-tag" style="pointer-events: none; cursor: default;">AMDEC</span>
+                            <span class="skill-tag" style="pointer-events: none; cursor: default;">MATLAB</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="timeline-item">
@@ -120,9 +194,38 @@
                         <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
                     </svg>
                     Assistant de Recherche
+                    <a href="https://nimbuscentre.ie/" target="_blank" class="timeline-link" title="Visiter le site de Nimbus Research Centre" rel="noopener noreferrer">
+                        <svg class="link-external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                            <polyline points="15 3 21 3 21 9"></polyline>
+                            <line x1="10" y1="14" x2="21" y2="3"></line>
+                        </svg>
+                    </a>
                 </h4>
                 <div class="timeline-subtitle">Nimbus Research Centre | Cork, Irlande</div>
                 <p>Conception et simulations électromagnétiques par éléments finis (CST Studio Suite). Développement de scripts Python pour l'automatisation du traitement de données et l'analyse des performances au sein d'une équipe multiculturelle.</p>
+                
+                <button type="button" class="btn-timeline-toggle">
+                    Détails
+                    <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </button>
+
+                <div class="timeline-details">
+                    <div class="timeline-details-inner">
+                        <h5>Missions clés & Livrables</h5>
+                        <ul>
+                            <li>Modélisation numérique 3D de dispositifs RF sous CST Studio Suite pour caractériser les ondes.</li>
+                            <li>Développement de scripts d'automatisation Python (traitement de données S-parameters, tracés de diagrammes polaires).</li>
+                            <li>Rédaction de rapports de synthèse techniques hebdomadaires en anglais pour présentation aux chercheurs.</li>
+                        </ul>
+                        <div class="timeline-details-footer">
+                            <span class="skill-tag" style="pointer-events: none; cursor: default;">CST Studio</span>
+                            <span class="skill-tag" style="pointer-events: none; cursor: default;">Python</span>
+                            <span class="skill-tag" style="pointer-events: none; cursor: default;">RF / Électromagnétisme</span>
+                            <span class="skill-tag" style="pointer-events: none; cursor: default;">Anglais technique</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="timeline-item">
@@ -133,9 +236,39 @@
                         <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
                     </svg>
                     Diplôme d'Ingénieur en Mécatronique et Robotique
+                    <a href="https://seatech.univ-tln.fr/" target="_blank" class="timeline-link" title="Visiter le site de SeaTech" rel="noopener noreferrer">
+                        <svg class="link-external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                            <polyline points="15 3 21 3 21 9"></polyline>
+                            <line x1="10" y1="14" x2="21" y2="3"></line>
+                        </svg>
+                    </a>
                 </h4>
                 <div class="timeline-subtitle">École d'Ingénieurs SeaTech | Toulon, France</div>
                 <p>Spécialisation : Systèmes mécatroniques complexes, Automatique avancée, Robotique en milieu difficile, Microcontrôleurs et Sûreté (AMDEC).</p>
+                
+                <button type="button" class="btn-timeline-toggle">
+                    Détails
+                    <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </button>
+
+                <div class="timeline-details">
+                    <div class="timeline-details-inner">
+                        <h5>Missions clés & Livrables</h5>
+                        <ul>
+                            <li>Modélisation cinématique et dynamique de manipulateurs robotiques (matrices de Denavit-Hartenberg).</li>
+                            <li>Implémentation d'asservissements sur cibles STM32 en C/C++ et interfaçage ROS 2.</li>
+                            <li>Projets d'études : conception de coques de drones autonomes et simulations de contrôle de vol.</li>
+                        </ul>
+                        <div class="timeline-details-footer">
+                            <span class="skill-tag" style="pointer-events: none; cursor: default;">C++ / C</span>
+                            <span class="skill-tag" style="pointer-events: none; cursor: default;">STM32</span>
+                            <span class="skill-tag" style="pointer-events: none; cursor: default;">ROS 2</span>
+                            <span class="skill-tag" style="pointer-events: none; cursor: default;">Automatique</span>
+                            <span class="skill-tag" style="pointer-events: none; cursor: default;">SolidWorks</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="timeline-item">
@@ -146,9 +279,38 @@
                         <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
                     </svg>
                     Cofondateur et Trésorier
+                    <a href="https://sealab-website-kappa.vercel.app/#acceuil" target="_blank" class="timeline-link" title="Visiter le site de Sea'Lab" rel="noopener noreferrer">
+                        <svg class="link-external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                            <polyline points="15 3 21 3 21 9"></polyline>
+                            <line x1="10" y1="14" x2="21" y2="3"></line>
+                        </svg>
+                    </a>
                 </h4>
                 <div class="timeline-subtitle">Sea'Lab (Conseil Étudiant & FabLab)</div>
                 <p>Structuration juridique et financière de l'organisation. Gestion du parc machines du FabLab (imprimantes 3D FDM) et support en prototypage rapide pour les projets étudiants.</p>
+                
+                <button type="button" class="btn-timeline-toggle">
+                    Détails
+                    <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </button>
+
+                <div class="timeline-details">
+                    <div class="timeline-details-inner">
+                        <h5>Missions clés & Livrables</h5>
+                        <ul>
+                            <li>Cocréation des statuts juridiques de l'association loi 1901 et budgets prévisionnels.</li>
+                            <li>Gestion du matériel d'impression 3D (FDM) et formation des membres du lab aux consignes de sécurité.</li>
+                            <li>Conseils en mécatronique aux équipes d'étudiants pour leurs projets de fin d'année.</li>
+                        </ul>
+                        <div class="timeline-details-footer">
+                            <span class="skill-tag" style="pointer-events: none; cursor: default;">Impression 3D</span>
+                            <span class="skill-tag" style="pointer-events: none; cursor: default;">Gestion financière</span>
+                            <span class="skill-tag" style="pointer-events: none; cursor: default;">Conseil technique</span>
+                            <span class="skill-tag" style="pointer-events: none; cursor: default;">SolidWorks</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
         </div>
