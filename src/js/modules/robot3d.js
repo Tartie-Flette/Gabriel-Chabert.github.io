@@ -70,7 +70,9 @@
                 100
             );
             camera.position.set(3.5, 2.5, 5); // Caméra reculée pour bien voir le robot
-            camera.lookAt(0, 1.2, 0); // Vise le centre de gravité du bras robotique
+            
+            // Cible caméra centrée sur le bras robotique
+            camera.lookAt(0, 1.2, 0);
 
             // Rendu WebGL avec canal alpha (transparence)
             renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -103,17 +105,20 @@
             if ('ResizeObserver' in window) {
                 const resizeObserver = new ResizeObserver((entries) => {
                     for (let entry of entries) {
-                        const w = entry.contentRect.width || container.parentElement.clientWidth;
-                        const h = entry.contentRect.height || container.parentElement.clientHeight;
+                        const w = entry.contentRect.width || container.clientWidth;
+                        const h = entry.contentRect.height || container.clientHeight;
                         if (w > 0 && h > 0) {
                             camera.aspect = w / h;
                             camera.updateProjectionMatrix();
                             renderer.setSize(w, h);
+                            
+                            // Cible caméra centrée sur le bras robotique
+                            camera.lookAt(0, 1.2, 0);
                             renderer.render(scene, camera);
                         }
                     }
                 });
-                resizeObserver.observe(container.parentElement);
+                resizeObserver.observe(container);
             } else {
                 window.addEventListener('resize', onWindowResize);
             }
@@ -145,7 +150,6 @@
             }
         }
 
-        // Modélisation géométrique hiérarchique du bras articulé
         function buildRobot() {
             const isDark = document.documentElement.classList.contains('dark-mode');
             
@@ -156,17 +160,19 @@
             let metalMatMetalness = 0.95;
 
             if (currentPreset === 'steel') {
-                metalColor = isDark ? 0x90A4AE : 0x455A64;
-                glowColor = isDark ? 0xCFD8DC : 0x78909C;
-                metalMatColor = isDark ? 0x37474F : 0xECEFF1;
-                metalMatRoughness = 0.15;
-                metalMatMetalness = 0.99;
+                // Preset Acier : Noyau bleu électrique et structure en chrome poli ultra-brillant
+                metalColor = 0x00E5FF;
+                glowColor = 0x80DEEA;
+                metalMatColor = isDark ? 0x78909C : 0xECEFF1;
+                metalMatRoughness = 0.08;
+                metalMatMetalness = 1.0;
             } else if (currentPreset === 'carbon') {
-                metalColor = isDark ? 0x4E342E : 0x212121;
-                glowColor = isDark ? 0x5D4037 : 0x424242;
-                metalMatColor = isDark ? 0x1A1A1A : 0x757575;
-                metalMatRoughness = 0.6;
-                metalMatMetalness = 0.7;
+                // Preset Carbone : Noyau jaune/orange rétro-éclairé et structure en carbone mat foncé
+                metalColor = 0xFF9100;
+                glowColor = 0xFFD54F;
+                metalMatColor = isDark ? 0x141416 : 0x3E3E42;
+                metalMatRoughness = 0.75;
+                metalMatMetalness = 0.35;
             }
 
             // 1. Matériaux haut de gamme
@@ -232,6 +238,16 @@
             outer1Mesh.position.y = 0.7;
             arm1Group.add(outer1Mesh);
 
+            // Collerettes métalliques de renfort (frettes mécaniques) aux extrémités du segment 1
+            const collar1Geom = new THREE.CylinderGeometry(0.125, 0.125, 0.06, 24);
+            const collar1Bottom = new THREE.Mesh(collar1Geom, metalMat);
+            collar1Bottom.position.y = 0.06;
+            arm1Group.add(collar1Bottom);
+            
+            const collar1Top = new THREE.Mesh(collar1Geom, metalMat);
+            collar1Top.position.y = 1.34;
+            arm1Group.add(collar1Top);
+
             // 3. Deuxième Segment (Bras supérieur)
             arm2Group = new THREE.Group();
             arm2Group.position.y = 1.4; // Placé au bout du bras 1
@@ -253,6 +269,16 @@
             outer2Mesh.position.y = 0.6;
             arm2Group.add(outer2Mesh);
 
+            // Collerettes métalliques de renfort aux extrémités du segment 2
+            const collar2Geom = new THREE.CylinderGeometry(0.085, 0.085, 0.05, 24);
+            const collar2Bottom = new THREE.Mesh(collar2Geom, metalMat);
+            collar2Bottom.position.y = 0.05;
+            arm2Group.add(collar2Bottom);
+            
+            const collar2Top = new THREE.Mesh(collar2Geom, metalMat);
+            collar2Top.position.y = 1.15;
+            arm2Group.add(collar2Top);
+
             // 4. Outil Terminal (Wrist & Pince / Capteur)
             toolGroup = new THREE.Group();
             toolGroup.position.y = 1.2;
@@ -273,6 +299,12 @@
             effector.rotation.x = Math.PI / 2;
             effector.position.y = 0.12;
             toolGroup.add(effector);
+
+            // Petit pointeur technique central (buse d'impression / télémètre)
+            const nozzleGeom = new THREE.CylinderGeometry(0.025, 0.01, 0.14, 16);
+            const nozzle = new THREE.Mesh(nozzleGeom, metalMat);
+            nozzle.position.y = 0.07;
+            toolGroup.add(nozzle);
         }
 
         function buildGrids() {
@@ -316,9 +348,9 @@
             trailPoints.length = 0;
             let trailColor = isDark ? 0xFF5A36 : 0xC84B31;
             if (currentPreset === 'steel') {
-                trailColor = isDark ? 0x90A4AE : 0x455A64;
+                trailColor = 0x00B0FF;
             } else if (currentPreset === 'carbon') {
-                trailColor = isDark ? 0x4E342E : 0x212121;
+                trailColor = 0xFFB300;
             }
 
             const trailGeom = new THREE.BufferGeometry();
@@ -362,26 +394,31 @@
             hudElement = document.createElement('div');
             hudElement.className = 'robot-hud-coords';
             
-            // Appliquer un style minimaliste correspondant au Design System
-            Object.assign(hudElement.style, {
-                position: 'absolute',
-                bottom: '16px',
-                left: '16px',
-                fontFamily: '"Space Grotesk", monospace',
-                fontSize: '0.75rem',
-                letterSpacing: '1px',
-                color: 'var(--accent-color)',
-                backgroundColor: 'rgba(var(--bg-rgb), 0.75)',
-                border: 'var(--border-width) solid var(--border-color)',
-                padding: '6px 12px',
-                borderRadius: 'var(--border-radius-sm)',
-                pointerEvents: 'none',
-                zIndex: '5',
-                transition: 'background-color var(--transition-normal), border-color var(--transition-normal), color var(--transition-normal)'
-            });
-            
-            hudElement.innerHTML = 'COORD // X: 0.00 | Y: 0.00 | Z: 0.00';
-            container.parentElement.appendChild(hudElement);
+            // Nouveau design : structure modulaire de télémétrie
+            hudElement.innerHTML = `
+                <div class="hud-header">
+                    <span class="hud-status-dot"></span>
+                    <span class="hud-title">TELEMETRY // ACTIVE</span>
+                </div>
+                <div class="hud-val-container">
+                    <div class="hud-coord-card">
+                        <span class="hud-axis">X</span>
+                        <span class="hud-val" id="hud-x">0.00</span>
+                        <span class="hud-unit">m</span>
+                    </div>
+                    <div class="hud-coord-card">
+                        <span class="hud-axis">Y</span>
+                        <span class="hud-val" id="hud-y">0.00</span>
+                        <span class="hud-unit">m</span>
+                    </div>
+                    <div class="hud-coord-card">
+                        <span class="hud-axis">Z</span>
+                        <span class="hud-val" id="hud-z">0.00</span>
+                        <span class="hud-unit">m</span>
+                    </div>
+                </div>
+            `;
+            container.parentElement.insertBefore(hudElement, container);
         }
 
         // Écouter les changements de thème pour mettre à jour les couleurs de la scène 3D
@@ -524,6 +561,9 @@
             camera.aspect = w / h;
             camera.updateProjectionMatrix();
             renderer.setSize(w, h);
+            
+            // Cible caméra centrée sur le bras robotique
+            camera.lookAt(0, 1.2, 0);
         }
 
         // Boucle d'animation fiabilisée
@@ -589,9 +629,18 @@
                     toolLight.position.set(toolWorldPos.x, toolWorldPos.y + 0.15, toolWorldPos.z);
                 }
 
-                // Mettre à jour le HUD textuel
+                // Mettre à jour le HUD textuel avec la nouvelle structure HTML
                 if (hudElement) {
-                    hudElement.innerHTML = `COORD // X: ${toolWorldPos.x.toFixed(2)} | Y: ${toolWorldPos.y.toFixed(2)} | Z: ${toolWorldPos.z.toFixed(2)}`;
+                    const hudX = hudElement.querySelector('#hud-x');
+                    const hudY = hudElement.querySelector('#hud-y');
+                    const hudZ = hudElement.querySelector('#hud-z');
+                    if (hudX && hudY && hudZ) {
+                        hudX.textContent = toolWorldPos.x.toFixed(2);
+                        hudY.textContent = toolWorldPos.y.toFixed(2);
+                        hudZ.textContent = toolWorldPos.z.toFixed(2);
+                    } else {
+                        createHUD();
+                    }
                 }
             }
 
