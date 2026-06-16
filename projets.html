@@ -46,7 +46,7 @@
     </style>
     <link rel="stylesheet" href="src/css/main.css">
     <script>
-        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        if (localStorage.getItem('theme') === 'dark') {
             document.documentElement.classList.add('dark-mode');
         } else {
             document.documentElement.classList.remove('dark-mode');
@@ -56,15 +56,24 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     
-    <!-- Scripts applicatifs de base (non-modules pour fonctionner en file:// local) -->
+    <!-- Scripts applicatifs de base -->
     <script src="src/js/modules/theme.js"></script>
     <script src="src/js/modules/transitions.js"></script>
     <script src="src/js/modules/abs-simulation.js"></script>
-    <script src="src/js/modules/usv-simulation.js"></script>
     <script src="src/js/modules/filtering.js"></script>
-    
-    <!-- Script modulaire pour les fonctionnalités avancées (3D et animations de scroll) -->
-    <script type="module" src="src/js/main.js"></script>
+    <script src="src/js/modules/animations.js"></script>
+    <script src="src/js/main.js"></script>
+
+    <!-- Rendu des équations LaTeX physiques -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
     <script type="application/ld+json">
         {
@@ -93,6 +102,7 @@
 
 </head>
 <body>
+    <div class="scroll-progress"></div>
 
     <div class="page-transition">
         <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
@@ -128,6 +138,7 @@
             <div class="nav-right">
                 <ul class="nav-links">
                     <li><a href="index.html">Parcours</a></li>
+                    <li><a href="about.html">À Propos</a></li>
                     <li><a href="projets.html" class="active">Projets</a></li>
                     <li><a href="resume.html">Resume</a></li>
                 </ul>
@@ -168,6 +179,54 @@
                                 <div class="star-text"><strong>Résultat :</strong> Élimination totale des pertes de paquets et réduction de la latence d'affichage de 40%, permettant un pilotage distant sécurisé.</div>
                             </div>
                         </div>
+                        
+                        <details class="project-details">
+                            <summary>Fiche Technique : Résilience de la liaison télémétrique et FIFO</summary>
+                            <div class="tech-details-container">
+                                <h5 class="tech-details-title">Analyse & Architecture de Télémétrie</h5>
+                                <p class="tech-details-intro">
+                                    Afin d'éviter tout blocage de l'IHM lors de la réception de trames NMEA 0183 fragmentées, l'architecture logicielle sépare le thread de communication réseau (écoute socket TCP/IP) et le thread principal d'affichage graphique (PyQt5) à l'aide d'un buffer circulaire (FIFO).
+                                </p>
+                                
+                                <h6 class="tech-details-subtitle">Analyse AMDEC (Failure Mode and Effects Analysis)</h6>
+                                <div class="amdec-table-wrapper">
+                                    <table class="amdec-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Composant / Fonction</th>
+                                                <th>Mode de Défaillance</th>
+                                                <th>Effet sur le Système</th>
+                                                <th>Criticité</th>
+                                                <th>Actions de Prévention / Mitigation</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Liaison Série / Ethernet</strong></td>
+                                                <td>Perte de trames NMEA par fragmentation ou gigue réseau</td>
+                                                <td>Désynchronisation de la trajectoire et freeze passager de l'IHM</td>
+                                                <td><span class="criticite-badge criticite-high">Critique (C=8)</span></td>
+                                                <td>Mise en place d'un buffer circulaire asynchrone pour lisser le flux de données entrant et rejeter les checksums invalides.</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Thread Principal IHM</strong></td>
+                                                <td>Surcharge d'évènements graphiques (Rafraîchissement excessif)</td>
+                                                <td>Gel de l'interface utilisateur (GUI freeze), perte de contrôle visuel</td>
+                                                <td><span class="criticite-badge criticite-medium">Moyen (C=6)</span></td>
+                                                <td>Throttling logiciel à 10 Hz du rafraîchissement des widgets d'IHM, isolation des tâches lourdes via QThreads.</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Socket TCP/IP</strong></td>
+                                                <td>Déconnexion réseau prolongée (perte de liaison radio)</td>
+                                                <td>Perte totale de la télémétrie et du retour d'état de l'USV</td>
+                                                <td><span class="criticite-badge criticite-high">Majeur (C=9)</span></td>
+                                                <td>Intégration d'un heartbeat logiciel automatique déclenchant le retour autonome (RTH) de l'USV après 3 secondes d'absence de ping.</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </details>
                     </div>
                     
                     <div class="project-sidebar">
@@ -193,9 +252,6 @@
                                     <div class="project-stat-lbl">Latence d'affichage UI</div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="project-actions" style="margin-top: auto;">
-                            <button type="button" class="btn-secondary" onclick="openUSVConsole()">Lancer la console de diagnostic</button>
                         </div>
                     </div>
                 </div>
@@ -227,16 +283,66 @@
                         </div>
                         
                         <details class="project-details">
-                            <summary>Voir la gestion des états critiques (FSM en C)</summary>
-                            <p class="code-snippet">
-                                // Rejet des trames invalides et protection mémoire<br>
-                                if (!validate_checksum(rx_buffer)) {<br>
-                                &nbsp;&nbsp;current_state = STATE_EMERGENCY_STOP;<br>
-                                &nbsp;&nbsp;halt_motors();<br>
-                                &nbsp;&nbsp;return;<br>
-                                }<br>
-                                process_valid_command();
-                            </p>
+                            <summary>Fiche Technique : Machine à États (FSM) et Intégrité du Signal UART</summary>
+                            <div class="tech-details-container">
+                                <h5 class="tech-details-title">Garantie d'Intégrité des Commandes UART & Automate FSM</h5>
+                                <p class="tech-details-intro">
+                                    Afin de prémunir le robot mobile contre toute commande erronée due à des perturbations électromagnétiques induites par les moteurs de forte puissance, chaque trame de communication transitant par la liaison UART est validée en temps réel. La somme de contrôle (checksum) de la trame reçue doit satisfaire l'équation suivante :
+                                </p>
+                                
+                                <div class="math-equation">
+                                    $$\text{Checksum} = \left( \sum_{i=0}^{N-1} \text{Byte}_i \right) \pmod{256}$$
+                                </div>
+                                
+                                <h6 class="tech-details-subtitle">Implémentation Sécurisée en C (Extrait)</h6>
+                                <p class="code-snippet">
+// Rejet des trames invalides et protection mémoire dans l'interruption
+if (!validate_checksum(rx_buffer, TRAME_SIZE)) {
+    current_state = STATE_EMERGENCY_STOP;
+    halt_motors();
+    trigger_alarm_led();
+    return;
+}
+process_valid_command();</p>
+
+                                <h6 class="tech-details-subtitle">Analyse AMDEC (Failure Mode and Effects Analysis)</h6>
+                                <div class="amdec-table-wrapper">
+                                    <table class="amdec-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Composant / Fonction</th>
+                                                <th>Mode de Défaillance</th>
+                                                <th>Effet sur le Système</th>
+                                                <th>Criticité</th>
+                                                <th>Actions de Prévention / Mitigation</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Liaison UART</strong></td>
+                                                <td>Corruption de bits (bruit électromagnétique des moteurs)</td>
+                                                <td>Interprétation erronée des commandes de vitesse (risque de collision)</td>
+                                                <td><span class="criticite-badge criticite-high">Critique (C=8)</span></td>
+                                                <td>Validation par checksum (modulo 256) sur chaque paquet et rejet immédiat en cas d'incohérence.</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Chien de garde (Watchdog)</strong></td>
+                                                <td>Perte ou gel de la liaison radio / émetteur</td>
+                                                <td>Le robot continue sur son dernier vecteur vitesse reçu sans contrôle</td>
+                                                <td><span class="criticite-badge criticite-high">Majeur (C=9)</span></td>
+                                                <td>Timeout de sécurité logiciel à 100ms forçant la FSM à basculer dans l'état <code>STATE_EMERGENCY_STOP</code>.</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Automate de contrôle (FSM)</strong></td>
+                                                <td>Transition d'état non autorisée ou indéfinie</td>
+                                                <td>Blocage du programme principal (Deadlock), comportement imprévisible</td>
+                                                <td><span class="criticite-badge criticite-medium">Moyen (C=6)</span></td>
+                                                <td>Définition explicite de chaque transition et clause <code>default</code> menant systématiquement à la mise en sécurité.</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </details>
                     </div>
                     
@@ -292,6 +398,75 @@
                                 <div class="star-text"><strong>Résultat :</strong> Stabilisation du glissement à la valeur cible en moins de 0.2 secondes en simulation, validant la robustesse de la boucle d'asservissement face aux délais matériels incompressibles.</div>
                             </div>
                         </div>
+                        
+                        <details class="project-details">
+                            <summary>Fiche Technique : Modélisation Physique & Régulation ABS</summary>
+                            <div class="tech-details-container">
+                                <h5 class="tech-details-title">Modélisation Dynamique du Contact Pneu-Route</h5>
+                                <p class="tech-details-intro">
+                                    La dynamique d'une roue de rayon \(r\) subissant un couple de freinage \(T_b\) sous une charge verticale \(F_z\) est régie par l'équation de rotation :
+                                </p>
+                                <div class="math-equation">
+                                    $$J \dot{\omega} = F_x r - T_b$$
+                                </div>
+                                <p class="tech-details-intro">
+                                    Où \(J\) est l'inertie de la roue, \(\omega\) sa vitesse angulaire, et \(F_x\) la force de freinage longitudinale développée au contact du sol. Cette force dépend du coefficient d'adhérence pneu-route \(\mu(\lambda)\) :
+                                </p>
+                                <div class="math-equation">
+                                    $$F_x = \mu(\lambda) F_z$$
+                                </div>
+                                <p class="tech-details-intro">
+                                    Le taux de glissement longitudinal \(\lambda\) caractérise l'écart de vitesse entre le véhicule (\(v_x\)) et la bande de roulement de la roue (\(\omega r\)) :
+                                </p>
+                                <div class="math-equation">
+                                    $$\lambda = \frac{v_x - \omega r}{v_x}$$
+                                </div>
+                                <p class="tech-details-intro">
+                                    Le coefficient de friction \(\mu(\lambda)\) est modélisé par la Formule Magique de Pacejka :
+                                </p>
+                                <div class="math-equation">
+                                    $$\mu(\lambda) = D \sin\left( C \arctan\left( B\lambda - E(B\lambda - \arctan(B\lambda)) \right) \right)$$
+                                </div>
+
+                                <h6 class="tech-details-subtitle">Analyse AMDEC (Failure Mode and Effects Analysis)</h6>
+                                <div class="amdec-table-wrapper">
+                                    <table class="amdec-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Composant / Fonction</th>
+                                                <th>Mode de Défaillance</th>
+                                                <th>Effet sur le Système</th>
+                                                <th>Criticité</th>
+                                                <th>Actions de Prévention / Mitigation</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Capteur de Vitesse de Roue (WSS)</strong></td>
+                                                <td>Perte de signal ou bruit de mesure (encrassement de la cible magnétique)</td>
+                                                <td>Calcul erroné du glissement \(\lambda\), blocage non régulé de la roue</td>
+                                                <td><span class="criticite-badge criticite-high">Critique (C=8)</span></td>
+                                                <td>Filtre de Kalman pour fusionner les mesures avec l'accéléromètre central du véhicule et détecter les anomalies de gradient.</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Groupe Hydraulique (Modulateur)</strong></td>
+                                                <td>Retard de réponse mécanique ou grippement d'électrovanne</td>
+                                                <td>Oscillations de pression, dépassement du glissement optimal (perte d'adhérence)</td>
+                                                <td><span class="criticite-badge criticite-medium">Moyen (C=7)</span></td>
+                                                <td>Compensation active des temps morts matériels (retards purs) dans le modèle prédictif du correcteur discret.</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Calculateur ABS (ECU)</strong></td>
+                                                <td>Saturation du CPU / Temps d'exécution de la boucle d'asservissement trop long</td>
+                                                <td>Retard de déclenchement de la régulation, perte de contrôle directionnel</td>
+                                                <td><span class="criticite-badge criticite-high">Majeur (C=9)</span></td>
+                                                <td>Algorithme d'asservissement implémenté en virgule fixe, optimisé pour s'exécuter dans une interruption à haute priorité à 100 Hz.</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </details>
                     </div>
                     
                     <div class="project-sidebar">
@@ -410,81 +585,6 @@
         </div>
     </div>
 
-    <div id="usv-modal" class="modal-overlay">
-        <div class="modal-content usv-modal-content">
-            <button class="close-modal" onclick="closeUSVConsole()" aria-label="Fermer la fenêtre">&times;</button>
-            <h4 class="modal-title">USV BlueBoat - Console de Supervision Réseau</h4>
-            
-            <div class="sim-grid">
-                <!-- Panneau de contrôle -->
-                <div class="sim-controls">
-                    <h5>Paramètres Diagnostic</h5>
-                    
-                    <div class="sim-control-group">
-                        <label for="usv-network">État de la Liaison Série-Ethernet</label>
-                        <select id="usv-network">
-                            <option value="good" selected>Nominale (0% Perte / Stable)</option>
-                            <option value="jitter">Perturbée (Gigue / Latence variable)</option>
-                            <option value="congested">Saturée (Congestion réseau)</option>
-                        </select>
-                    </div>
-
-                    <div class="sim-control-group">
-                        <label for="usv-fifo">Gestion des Buffers Circulaires (FIFO)</label>
-                        <select id="usv-fifo">
-                            <option value="enabled" selected>Actifs (Traitement Asynchrone)</option>
-                            <option value="disabled">Inactifs (Traitement Direct)</option>
-                        </select>
-                    </div>
-
-                    <button id="btn-run-usv" class="btn-primary btn-sim-play">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                        Lancer la télémétrie
-                    </button>
-                </div>
-
-                <!-- Terminal & Visualisations -->
-                <div class="sim-visualizer">
-                    <div class="usv-terminal-container">
-                        <div class="terminal-header">
-                            <span class="terminal-dot red"></span>
-                            <span class="terminal-dot yellow"></span>
-                            <span class="terminal-dot green"></span>
-                            <span class="terminal-title">usv_supervisor_node.log</span>
-                        </div>
-                        <div id="usv-terminal" class="terminal-body">
-                            [SYSTEM] Console prête. Cliquez sur "Lancer la télémétrie"...
-                        </div>
-                    </div>
-                    
-                    <div class="sim-lower-row" style="grid-template-columns: 1fr;">
-                        <div class="sim-stats">
-                            <div class="sim-stat-card">
-                                <span class="sim-stat-label">Charge du Buffer FIFO</span>
-                                <div class="buffer-bar-container">
-                                    <div id="buffer-bar" class="buffer-bar-fill"></div>
-                                </div>
-                                <span id="usv-stat-buffer" class="sim-stat-value">0%</span>
-                            </div>
-                            <div class="sim-stat-card">
-                                <span class="sim-stat-label">Latence IHM</span>
-                                <span id="usv-stat-latency" class="sim-stat-value">0 ms</span>
-                            </div>
-                            <div class="sim-stat-card">
-                                <span class="sim-stat-label">Pertes de Trames</span>
-                                <span id="usv-stat-loss" class="sim-stat-value">0%</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <p class="modal-caption" style="margin-top: 15px;">
-                Ce simulateur démontre l'impact des buffers circulaires FIFO asynchrones. En cas de congestion réseau ou gigue, l'IHM asynchrone stocke les trames NMEA fragmentées dans une FIFO à file d'attente circulaire. Sans buffer, les trames corrompues ou retardées sont perdues (perte de paquets en hausse), tandis qu'avec le buffer actif, les données sont traitées de manière déterministe et stable à 100%.
-            </p>
-        </div>
-    </div>
-
     <footer>
         <div class="container footer-content">
             <p>© 2026 Gabriel Chabert | Région Parisienne</p>
@@ -492,52 +592,6 @@
         </div>
     </footer>
 
-    <script>
-        function openSimulation() {
-            const modal = document.getElementById('abs-modal');
-            if (modal) {
-                modal.classList.add('active');
-            }
-        }
-
-        function closeSimulation() {
-            const modal = document.getElementById('abs-modal');
-            if (modal) {
-                modal.classList.remove('active');
-            }
-        }
-
-        function openUSVConsole() {
-            const modal = document.getElementById('usv-modal');
-            if (modal) {
-                modal.classList.add('active');
-                if (window.openUSVConsoleCallback) {
-                    window.openUSVConsoleCallback();
-                }
-            }
-        }
-
-        function closeUSVConsole() {
-            const modal = document.getElementById('usv-modal');
-            if (modal) {
-                modal.classList.remove('active');
-                if (window.closeUSVConsoleCallback) {
-                    window.closeUSVConsoleCallback();
-                }
-            }
-        }
-
-        window.addEventListener('click', function(event) {
-            const absModal = document.getElementById('abs-modal');
-            const usvModal = document.getElementById('usv-modal');
-            if (event.target === absModal) {
-                closeSimulation();
-            }
-            if (event.target === usvModal) {
-                closeUSVConsole();
-            }
-        });
-    </script>
 
 </body>
 </html>

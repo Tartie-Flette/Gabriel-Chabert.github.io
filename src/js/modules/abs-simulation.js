@@ -659,4 +659,12 @@
             stopSimulation();
         }
     };
+
+    // Fermer le modal en cliquant en dehors
+    window.addEventListener('click', (event) => {
+        const absModal = document.getElementById('abs-modal');
+        if (event.target === absModal) {
+            window.closeSimulation();
+        }
+    });
 })();

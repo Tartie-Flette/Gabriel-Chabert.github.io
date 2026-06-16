@@ -46,7 +46,7 @@
     </style>
     <link rel="stylesheet" href="src/css/main.css">
     <script>
-        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        if (localStorage.getItem('theme') === 'dark') {
             document.documentElement.classList.add('dark-mode');
         } else {
             document.documentElement.classList.remove('dark-mode');
@@ -56,13 +56,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     
-    <!-- Scripts applicatifs de base (non-modules pour fonctionner en file:// local) -->
+    <!-- Scripts applicatifs de base -->
     <script src="src/js/modules/theme.js"></script>
     <script src="src/js/modules/transitions.js"></script>
     <script src="src/js/modules/filtering.js"></script>
-    
-    <!-- Script modulaire pour les fonctionnalités avancées (3D et animations de scroll) -->
-    <script type="module" src="src/js/main.js"></script>
+    <script src="src/js/modules/animations.js"></script>
+    <script src="src/js/main.js"></script>
 
     <script type="application/ld+json">
         {
@@ -91,6 +90,7 @@
 
 </head>
 <body>
+    <div class="scroll-progress"></div>
 
     <div class="page-transition">
         <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
@@ -126,6 +126,7 @@
             <div class="nav-right">
                 <ul class="nav-links">
                     <li><a href="index.html">Parcours</a></li>
+                    <li><a href="about.html">À Propos</a></li>
                     <li><a href="projets.html">Projets</a></li>
                     <li><a href="resume.html" class="active">Resume</a></li>
                 </ul>
@@ -143,10 +144,16 @@
             <h3 class="page-title no-margin" style="margin-top: 0;">Expérience & <span class="gradient-text">Formation</span></h3>
             <a href="assets/CV_Resume_Gabriel_Chabert.pdf" target="_blank" class="btn-secondary" style="margin-top: 0;">Télécharger en PDF</a>
         </div>
+
+        <div class="timeline-filters">
+            <button type="button" class="filter-btn active" data-filter="all">Tous</button>
+            <button type="button" class="filter-btn" data-filter="experience">Expériences</button>
+            <button type="button" class="filter-btn" data-filter="formation">Formations</button>
+        </div>
         
         <div class="timeline">
             
-            <div class="timeline-item">
+            <div class="timeline-item" data-category="experience">
                 <div class="timeline-date">Mars 2026 - Présent</div>
                 <h4 class="timeline-title">
                     <svg class="timeline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
@@ -164,10 +171,6 @@
                 <div class="timeline-subtitle">Circle Mobility | Paris, France</div>
                 <p>Modélisation de systèmes, gestion de la nomenclature (BOM) et mise à jour des spécifications de câblage pour sécuriser la phase d'industrialisation. Intégration de composants sur véhicules de présérie et analyse des trames de bus CAN sur bancs d'essai.</p>
                 
-                <button type="button" class="btn-timeline-toggle">
-                    Détails
-                    <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                </button>
 
                 <div class="timeline-details">
                     <div class="timeline-details-inner">
@@ -187,7 +190,7 @@
                 </div>
             </div>
 
-            <div class="timeline-item">
+            <div class="timeline-item" data-category="experience">
                 <div class="timeline-date">Mai 2025 - Août 2025</div>
                 <h4 class="timeline-title">
                     <svg class="timeline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
@@ -205,10 +208,6 @@
                 <div class="timeline-subtitle">Nimbus Research Centre | Cork, Irlande</div>
                 <p>Conception et simulations électromagnétiques par éléments finis (CST Studio Suite). Développement de scripts Python pour l'automatisation du traitement de données et l'analyse des performances au sein d'une équipe multiculturelle.</p>
                 
-                <button type="button" class="btn-timeline-toggle">
-                    Détails
-                    <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                </button>
 
                 <div class="timeline-details">
                     <div class="timeline-details-inner">
@@ -228,7 +227,7 @@
                 </div>
             </div>
 
-            <div class="timeline-item">
+            <div class="timeline-item" data-category="formation">
                 <div class="timeline-date">Sept. 2023 - Sept. 2026</div>
                 <h4 class="timeline-title">
                     <svg class="timeline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
@@ -247,10 +246,6 @@
                 <div class="timeline-subtitle">École d'Ingénieurs SeaTech | Toulon, France</div>
                 <p>Spécialisation : Systèmes mécatroniques complexes, Automatique avancée, Robotique en milieu difficile, Microcontrôleurs et Sûreté (AMDEC).</p>
                 
-                <button type="button" class="btn-timeline-toggle">
-                    Détails
-                    <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                </button>
 
                 <div class="timeline-details">
                     <div class="timeline-details-inner">
@@ -271,7 +266,7 @@
                 </div>
             </div>
 
-            <div class="timeline-item">
+            <div class="timeline-item" data-category="experience">
                 <div class="timeline-date">2025 - 2026</div>
                 <h4 class="timeline-title">
                     <svg class="timeline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
@@ -290,10 +285,6 @@
                 <div class="timeline-subtitle">Sea'Lab (Conseil Étudiant & FabLab)</div>
                 <p>Structuration juridique et financière de l'organisation. Gestion du parc machines du FabLab (imprimantes 3D FDM) et support en prototypage rapide pour les projets étudiants.</p>
                 
-                <button type="button" class="btn-timeline-toggle">
-                    Détails
-                    <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                </button>
 
                 <div class="timeline-details">
                     <div class="timeline-details-inner">
@@ -314,6 +305,79 @@
             </div>
 
         </div>
+
+        <section class="skills-section" style="margin-top: 60px; margin-bottom: 60px;">
+            <h3 class="section-title" style="font-family: var(--font-heading); font-size: 1.8rem; font-weight: 700; margin-bottom: 30px; text-align: left; color: var(--text-main);">Compétences <span class="gradient-text">Techniques</span></h3>
+            <div class="competency-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;">
+                <div class="competency-card glow-card" style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: var(--border-radius-md); padding: 24px;">
+                    <h5 style="font-family: var(--font-heading); font-size: 1.15rem; margin-bottom: 18px; color: var(--text-main); font-weight: 600;">Systèmes Embarqués & Programmation</h5>
+                    
+                    <div class="jauge-group" style="margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 6px; color: var(--text-light); font-weight: 500;">
+                            <span>C / C++ (STM32, Microcontrôleurs)</span>
+                            <span>90%</span>
+                        </div>
+                        <div class="jauge-track" style="height: 6px; background: var(--bg-alt); border-radius: 3px; overflow: hidden;">
+                            <div class="jauge-fill" data-percent="90" style="height: 100%; width: 0%; background: var(--accent-color); border-radius: 3px; transition: width 1.2s cubic-bezier(0.25, 1, 0.5, 1);"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="jauge-group" style="margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 6px; color: var(--text-light); font-weight: 500;">
+                            <span>Python (Traitement de données, Automatisation)</span>
+                            <span>85%</span>
+                        </div>
+                        <div class="jauge-track" style="height: 6px; background: var(--bg-alt); border-radius: 3px; overflow: hidden;">
+                            <div class="jauge-fill" data-percent="85" style="height: 100%; width: 0%; background: var(--accent-color); border-radius: 3px; transition: width 1.2s cubic-bezier(0.25, 1, 0.5, 1);"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="jauge-group">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 6px; color: var(--text-light); font-weight: 500;">
+                            <span>Bus de terrain & Réseaux (CAN, UART, TCP/IP)</span>
+                            <span>80%</span>
+                        </div>
+                        <div class="jauge-track" style="height: 6px; background: var(--bg-alt); border-radius: 3px; overflow: hidden;">
+                            <div class="jauge-fill" data-percent="80" style="height: 100%; width: 0%; background: var(--accent-color); border-radius: 3px; transition: width 1.2s cubic-bezier(0.25, 1, 0.5, 1);"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="competency-card glow-card" style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: var(--border-radius-md); padding: 24px;">
+                    <h5 style="font-family: var(--font-heading); font-size: 1.15rem; margin-bottom: 18px; color: var(--text-main); font-weight: 600;">Robotique, Automatique & CAO</h5>
+                    
+                    <div class="jauge-group" style="margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 6px; color: var(--text-light); font-weight: 500;">
+                            <span>ROS 2 (Sous-systèmes, Télémétrie)</span>
+                            <span>75%</span>
+                        </div>
+                        <div class="jauge-track" style="height: 6px; background: var(--bg-alt); border-radius: 3px; overflow: hidden;">
+                            <div class="jauge-fill" data-percent="75" style="height: 100%; width: 0%; background: var(--accent-color); border-radius: 3px; transition: width 1.2s cubic-bezier(0.25, 1, 0.5, 1);"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="jauge-group" style="margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 6px; color: var(--text-light); font-weight: 500;">
+                            <span>MATLAB / Simulink (Régulation ABS, PID, Bang-Bang)</span>
+                            <span>80%</span>
+                        </div>
+                        <div class="jauge-track" style="height: 6px; background: var(--bg-alt); border-radius: 3px; overflow: hidden;">
+                            <div class="jauge-fill" data-percent="80" style="height: 100%; width: 0%; background: var(--accent-color); border-radius: 3px; transition: width 1.2s cubic-bezier(0.25, 1, 0.5, 1);"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="jauge-group">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 6px; color: var(--text-light); font-weight: 500;">
+                            <span>CAO & Sûreté (SolidWorks, AMDEC, RCA)</span>
+                            <span>85%</span>
+                        </div>
+                        <div class="jauge-track" style="height: 6px; background: var(--bg-alt); border-radius: 3px; overflow: hidden;">
+                            <div class="jauge-fill" data-percent="85" style="height: 100%; width: 0%; background: var(--accent-color); border-radius: 3px; transition: width 1.2s cubic-bezier(0.25, 1, 0.5, 1);"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer>

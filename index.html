@@ -46,7 +46,7 @@
     </style>
     <link rel="stylesheet" href="src/css/main.css">
     <script>
-        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        if (localStorage.getItem('theme') === 'dark') {
             document.documentElement.classList.add('dark-mode');
         } else {
             document.documentElement.classList.remove('dark-mode');
@@ -57,13 +57,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     
-    <!-- Scripts applicatifs de base (non-modules pour fonctionner en file:// local) -->
+    <!-- Scripts applicatifs de base -->
     <script src="src/js/modules/theme.js"></script>
     <script src="src/js/modules/transitions.js"></script>
     <script src="src/js/modules/filtering.js"></script>
-    
-    <!-- Script modulaire pour les fonctionnalités avancées (3D et animations de scroll) -->
-    <script type="module" src="src/js/main.js"></script>
+    <script src="src/js/modules/animations.js"></script>
+    <script src="src/js/modules/robot3d.js"></script>
+    <script src="src/js/main.js"></script>
 
     <script type="application/ld+json">
         {
@@ -91,6 +91,7 @@
     </script>
 </head>
 <body>
+    <div class="scroll-progress"></div>
 
     <div class="page-transition">
         <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
@@ -126,6 +127,7 @@
             <div class="nav-right">
                 <ul class="nav-links">
                     <li><a href="index.html" class="active">Parcours</a></li>
+                    <li><a href="about.html">À Propos</a></li>
                     <li><a href="projets.html">Projets</a></li>
                     <li><a href="resume.html">Resume</a></li>
                 </ul>
@@ -154,9 +156,27 @@
                     
                     <!-- Panneau de contrôle interactif pour le bras 3D -->
                     <div class="robot-controls-panel">
-                        <button type="button" id="btn-robot-mode" class="btn-mode-toggle" title="Basculer entre contrôle Manuel (Sliders) et Automatique (Souris)">
-                            <span>Mode : Auto</span>
+                    <div class="mode-selector is-auto">
+                        <button type="button" id="btn-mode-auto" class="mode-btn active" title="Mode Automatique (Suivi Souris)">
+                            <svg class="mode-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3"></circle></svg>
+                            Auto
                         </button>
+                        <button type="button" id="btn-mode-trajectory" class="mode-btn" title="Mode Trajectoire (Dessin 3D)">
+                            <svg class="mode-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                            Trajectoire
+                        </button>
+                        <button type="button" id="btn-mode-manual" class="mode-btn" title="Mode Manuel (Curseurs)">
+                            <svg class="mode-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
+                            Manuel
+                        </button>
+                        <div class="mode-slider-indicator"></div>
+                    </div>
+                    
+                    <div class="preset-selector">
+                        <button type="button" class="preset-btn active" data-preset="terracotta" title="Thème Terracotta">Terracotta</button>
+                        <button type="button" class="preset-btn" data-preset="steel" title="Acier Poli">Acier</button>
+                        <button type="button" class="preset-btn" data-preset="carbon" title="Fibre de Carbone">Carbone</button>
+                    </div>
                         <div class="robot-sliders" style="display: none;">
                             <div class="slider-group">
                                 <label for="slider-base">Base : <span id="val-base">0°</span></label>
@@ -186,7 +206,7 @@
             </div>
             
             <div class="skills-grid">
-                <div class="skill-card">
+                <div class="skill-card glow-card">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="skill-card-icon">
                         <rect x="2" y="2" width="20" height="20" rx="2" ry="2"></rect>
                         <rect x="6" y="6" width="12" height="12" rx="2" ry="2"></rect>
@@ -205,7 +225,7 @@
                     <span class="skill-tag">UART / CAN</span>
                 </div>
                 
-                <div class="skill-card">
+                <div class="skill-card glow-card">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="skill-card-icon">
                         <circle cx="12" cy="5" r="3"></circle>
                         <path d="M6.5 8a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2"></path>
@@ -220,15 +240,15 @@
                     <span class="skill-tag">MATLAB/Simulink</span>
                 </div>
 
-                <div class="skill-card">
+                <div class="skill-card glow-card">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="skill-card-icon">
                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                         <polyline points="8 11 11 14 17 8"></polyline>
                     </svg>
                     <h4>Ingénierie & Sûreté</h4>
-                    <span class="skill-tag">AMDEC / RCA</span>
-                    <span class="skill-tag">SolidWorks</span>
-                    <span class="skill-tag">Prototypage Rapide</span>
+                    <span class="skill-tag" style="pointer-events: none; cursor: default;">AMDEC / RCA</span>
+                    <span class="skill-tag" style="pointer-events: none; cursor: default;">SolidWorks</span>
+                    <span class="skill-tag" style="pointer-events: none; cursor: default;">Prototypage Rapide</span>
                 </div>
             </div>
         </section>
@@ -249,25 +269,6 @@
         </div>
     </footer>
 
-    <script>
-        // Gère le clic sur le bouton "Me contacter" pour copier l'e-mail dans le presse-papiers
-        document.getElementById('email-btn').addEventListener('click', function() {
-            const btn = this;
-            const email = 'gabriel.chabert.s@gmail.com';
-
-            // Utilisation de l'API moderne Clipboard
-            navigator.clipboard.writeText(email).then(() => {
-                btn.textContent = 'E-mail copié !';
-                
-                // Retour à l'état initial après 2 secondes
-                setTimeout(() => {
-                    btn.textContent = 'Me contacter';
-                }, 2000);
-            }).catch(err => {
-                console.error('Erreur lors de la copie : ', err);
-            });
-        });
-    </script>
 
     
 
